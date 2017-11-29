@@ -16,11 +16,21 @@ namespace Invader
         
         public Stage()
         {
-
+            state = Def.State.Title;
+            stageNum = 1;
+            pCommander = new PlayerCommander();
+            pCommander.lost += PCommander_lost;
         }
 
+        private void PCommander_lost(object sender, EventArgs e)
+        {
+            if (state == Def.State.InGame)
+            {
+                state = Def.State.BeShotDown; 
+            }
+        }
 
-        public void changeStateByKey(object sender, KeyRoutedEventArgs e)
+        public void interactByKey(object sender, KeyRoutedEventArgs e)
         {
             switch (state)
             {
@@ -42,6 +52,20 @@ namespace Invader
                     else if (e.Key == Windows.System.VirtualKey.Escape)
                     {
                         state = Def.State.End;
+                    }
+                    break;
+                case Def.State.InGame:
+                    if (e.Key == Windows.System.VirtualKey.Left)
+                    {
+                        pCommander.moveLeft();
+                    }
+                    else if (e.Key == Windows.System.VirtualKey.Right)
+                    {
+                        pCommander.moveRight();
+                    }
+                    else if (e.Key == Windows.System.VirtualKey.Space)
+                    {
+                        pCommander.shot();
                     }
                     break;
             }

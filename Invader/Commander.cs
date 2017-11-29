@@ -14,7 +14,7 @@ namespace Invader
         private Vector2 initialPosition;
 
         public event EventHandler won;
-        public event EventHandler losed;
+        public event EventHandler lost;
 
         public PlayerCommander()
         {
@@ -59,6 +59,11 @@ namespace Invader
             }
         }
 
+        public void shot()
+        {
+            platoon.randomizeLeaderShot();
+        }
+
 
         private void Platoon_Annihilated(object sender, EventArgs e)
         {
@@ -67,10 +72,10 @@ namespace Invader
             {
                 remaining--;
                 initialPosition = pla.platoonBox.start;
-                organizeAttacker();
-                return;
+                //organizeAttacker();
+                //return;
             }
-            EventHandler handler = losed;
+            EventHandler handler = lost;
             if (handler != null)
             {
                 handler(this, EventArgs.Empty);
@@ -87,7 +92,7 @@ namespace Invader
 
         private int moveCount, maxCountStep, slowestOffset;
 
-        public event EventHandler losed;
+        public event EventHandler lost;
         public event EventHandler won;
 
         public EnemyCommander(double maxrow, double maxcol, int stageNum)
@@ -174,7 +179,7 @@ namespace Invader
 
         private void Platoon_Annihilated(object sender, EventArgs e)
         {
-            EventHandler handler = losed;
+            EventHandler handler = lost;
             if (handler != null)
             {
                 handler(this, EventArgs.Empty);

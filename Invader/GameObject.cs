@@ -46,6 +46,18 @@ namespace Invader
             gmObjList.Remove(item);
         }
 
+        public void moveAll()
+        {
+            foreach (GameObject item in gmObjList)
+            {
+                if (item is MovableObject)
+                {
+                    MovableObject mvObj = item as MovableObject;
+                    mvObj.move();
+                }
+            }
+        }
+
         public IEnumerable<GameObject> iterate()
         {
             foreach (GameObject item in gmObjList)

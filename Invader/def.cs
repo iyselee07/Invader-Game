@@ -27,6 +27,7 @@ namespace Invader
         public const double playerSpeed = 1.0;
 
         public const double existHeight = 480.0, existWidth = 360.0;
+        public const double invadingHeight = 400.0, invadingWidth = 360.0;
     }
 
 

@@ -13,6 +13,12 @@ namespace Invader
         private EnemyCommander eCommander;
         public Def.State state { private set; get; }
         public int stageNum { private set; get; }
+        
+        public Stage()
+        {
+
+        }
+
 
         public void changeStateByKey(object sender, KeyRoutedEventArgs e)
         {

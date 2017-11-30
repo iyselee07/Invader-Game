@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Input;
+using Windows.System.Threading;
 
 namespace Invader
 {
@@ -11,26 +12,71 @@ namespace Invader
     {
         private PlayerCommander pCommander;
         private EnemyCommander eCommander;
+        private ThreadPoolTimer timer;
+        private SortedDictionary<string, bool> moveDic = new SortedDictionary<string, bool>() {{"left", false}, {"right", false}};
+        private bool currentSpace = false, previousSpace = false, oneShot = false;
         public Def.State state { private set; get; }
         public int stageNum { private set; get; }
-        
+
+        private int shotdownCount = 0;
+
         public Stage()
         {
             state = Def.State.Title;
             stageNum = 1;
             pCommander = new PlayerCommander();
             pCommander.lost += PCommander_lost;
+            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(timerEvent), TimeSpan.FromMilliseconds(Def.frameSpan));
         }
 
-        private void PCommander_lost(object sender, EventArgs e)
+        private async void timerEvent(ThreadPoolTimer timer)
         {
-            if (state == Def.State.InGame)
+            switch (state)
             {
-                state = Def.State.BeShotDown; 
+                case Def.State.EnemyInit:
+                    eCommander = new EnemyCommander(stageNum);
+                    eCommander.lost += ECommander_lost;
+                    eCommander.won += ECommander_won;
+                    Wall.makeTemplateDefenceWall();
+                    state = Def.State.PlayerInit;
+                    break;
+                case Def.State.PlayerInit:
+                    pCommander.organizeAttacker();
+                    state = Def.State.InGame;
+                    break;
+                case Def.State.InGame:
+                    if (moveDic["left"]) pCommander.moveLeft();
+                    if (moveDic["right"]) pCommander.moveRight();
+                    oneShot = currentSpace && !previousSpace;
+                    previousSpace = currentSpace;
+                    if (oneShot) pCommander.shot();
+                    eCommander.invade();
+                    await Existence.getInstance().moveAll();
+                    break;
+                case Def.State.BeShotDown:
+                    if (shotdownCount <= Def.shotdownTime)
+                    {
+                        shotdownCount++;
+                    }
+                    else
+                    {
+                        shotdownCount = 0;
+                        if (pCommander.remaining == 0)
+                        {
+                            state = Def.State.GameOver;
+                        }
+                        else
+                        {
+                            state = Def.State.PlayerInit;
+                        }
+                    }
+                    break; 
             }
         }
 
-        public void interactByKey(object sender, KeyRoutedEventArgs e)
+
+
+        public void interactByKeyPress(object sender, KeyRoutedEventArgs e)
         {
             switch (state)
             {
@@ -57,18 +103,61 @@ namespace Invader
                 case Def.State.InGame:
                     if (e.Key == Windows.System.VirtualKey.Left)
                     {
-                        pCommander.moveLeft();
+                        moveDic["left"] = true;
                     }
                     else if (e.Key == Windows.System.VirtualKey.Right)
                     {
-                        pCommander.moveRight();
+                        moveDic["right"] = true;
                     }
                     else if (e.Key == Windows.System.VirtualKey.Space)
                     {
-                        pCommander.shot();
+                        currentSpace = true;
                     }
                     break;
             }
         }
+
+        public void interactByKeyRelease(object sender, KeyRoutedEventArgs e)
+        {
+            switch (state)
+            {
+                case Def.State.InGame:
+                    if (e.Key == Windows.System.VirtualKey.Left)
+                    {
+                        moveDic["left"] = false;
+                    }
+                    else if (e.Key == Windows.System.VirtualKey.Right)
+                    {
+                        moveDic["right"] = false;
+                    }
+                    else if (e.Key == Windows.System.VirtualKey.Space)
+                    {
+                        currentSpace = false;
+                    }
+                    break;
+            }
+        }
+
+
+        private void PCommander_lost(object sender, EventArgs e)
+        {
+            if (state == Def.State.InGame)
+            {
+                state = Def.State.BeShotDown;
+            }
+        }
+
+        private void ECommander_won(object sender, EventArgs e)
+        {
+            stageNum = 1;
+            state = Def.State.GameOver;
+        }
+
+        private void ECommander_lost(object sender, EventArgs e)
+        {
+            stageNum++;
+            state = Def.State.EnemyInit;
+        }
+
     }
 }

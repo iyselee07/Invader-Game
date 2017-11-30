@@ -33,6 +33,7 @@ namespace Invader
                 ny = nextPosition.y + velocity * angle.y;
             Vector2 next = new Vector2(nx, ny);
             base.move();
+            isHitToSomething();
             base.setNextPos(next);
         }
 

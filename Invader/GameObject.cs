@@ -46,8 +46,9 @@ namespace Invader
             gmObjList.Remove(item);
         }
 
-        public void moveAll()
+        public Task<int> moveAll()
         {
+            int num = 0;
             foreach (GameObject item in gmObjList)
             {
                 if (item is MovableObject)
@@ -56,6 +57,7 @@ namespace Invader
                     mvObj.move();
                 }
             }
+            return Task<int>.FromResult(num);
         }
 
         public IEnumerable<GameObject> iterate()

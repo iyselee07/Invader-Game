@@ -28,5 +28,21 @@ namespace Invader
             }
             exist.remove(this);
         }
+
+        public static void makeTemplateDefenceWall()
+        {
+            int wallNum = Def.wallTeamNum;
+            double wallSize = Def.wallSize;
+            Vector2 teamPos = Def.wallInit.copy();
+            for (int i = 0; i < wallNum; i++)
+            {
+                foreach (Vector2 pos in Def.wallTeam)
+                {
+                    Vector2 wallPos = teamPos + pos;
+                    new Wall(wallPos, wallSize, wallSize, Def.wallHP);
+                }
+                teamPos += Def.wallInterval; 
+            }
+        }
     }
 }

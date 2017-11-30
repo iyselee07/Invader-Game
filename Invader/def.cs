@@ -28,6 +28,16 @@ namespace Invader
 
         public const double existHeight = 480.0, existWidth = 360.0;
         public const double invadingHeight = 400.0, invadingWidth = 360.0;
+
+        public const int frameSpan = 1000 / 60;
+
+        public const int wallTeamNum = 4, wallHP = 4;
+        public const double wallSize = 15.0;
+        public static readonly Vector2 wallInit = new Vector2(20.0, 380.0);
+        public static readonly Vector2 wallInterval = new Vector2(60.0, 0.0);
+        public static readonly List<Vector2> wallTeam = new List<Vector2>(5) { new Vector2(0.0, 0.0),  new Vector2(0.0, wallSize), new Vector2(wallSize, wallSize), new Vector2(wallSize * 2.0, wallSize), new Vector2(wallSize * 2.0, 0.0) };
+
+        public const int shotdownTime = 1000 * 1;
     }
 
 

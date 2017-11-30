@@ -110,6 +110,21 @@ namespace Invader
             slowestOffset = (Def.maxInvadeSpeedCount - Def.leastInvadeSpeedCount) / maxCountStep;
         }
 
+        public EnemyCommander(int stageNum)
+        {
+            Vector2
+                start = new Vector2(0.0, 0.0),
+                end = new Vector2(Def.invadingWidth, Def.invadingHeight);
+            invadingArea = new Area(start, end);
+            platoon = new Platoon(0, col);
+            makeTemplateEnemy(stageNum);
+            platoon.Annihilated += Platoon_Annihilated;
+            nowGoRight = true;
+            moveCount = 0;
+            maxCountStep = col * row / Def.InvadeSpeedChange;
+            slowestOffset = (Def.maxInvadeSpeedCount - Def.leastInvadeSpeedCount) / maxCountStep;
+        }
+
         private void makeTemplateEnemy(int sNum)
         {
             int startHightNum;

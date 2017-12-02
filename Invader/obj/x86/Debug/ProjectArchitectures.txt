@@ -1,1 +1,1 @@
-C:\Users\iyselee\Desktop\Invader\Invader\Invader.csproj;x86
+C:\Users\17itoh\Desktop\Invader\mydev\Invader\Invader.csproj;x86

@@ -20,13 +20,22 @@ namespace Invader
 
         private int shotdownCount = 0;
 
-        public Stage()
+         public static Stage singleton = new Stage();
+
+        public event EventHandler clock;
+
+        private Stage()
         {
             state = Def.State.Title;
             stageNum = 1;
             pCommander = new PlayerCommander();
             pCommander.lost += PCommander_lost;
             timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(timerEvent), TimeSpan.FromMilliseconds(Def.frameSpan));
+        }
+
+        public static Stage getInstance()
+        {
+            return singleton;
         }
 
         private async void timerEvent(ThreadPoolTimer timer)
@@ -71,6 +80,11 @@ namespace Invader
                         }
                     }
                     break; 
+            }
+            EventHandler handler = clock;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
             }
         }
 

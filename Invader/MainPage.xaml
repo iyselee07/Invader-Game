@@ -10,6 +10,8 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" KeyDown="Grid_KeyDown" KeyUp="Grid_KeyUp">
         <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="360" >
             <TextBlock x:Name="textBlock" Canvas.Left="150" TextWrapping="Wrap" Text="TitleLogo" Canvas.Top="140" />
+            <!--<Button x:Name="button" Content="Button" Canvas.Left="150" Canvas.Top="233" Opacity="0"/>-->
+            <local:KeyHolder x:Name="keyholder" Canvas.Left="150"  Canvas.Top="140" />
         </Canvas>
 
     </Grid>

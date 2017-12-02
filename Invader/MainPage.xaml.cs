@@ -28,7 +28,11 @@ namespace Invader
             this.InitializeComponent();
             stage = Stage.getInstance();
             stage.clock += Stage_clock;
-            this.Loaded += delegate { this.Focus(FocusState.Programmatic); };
+            this.Loaded += delegate {
+                this.keyholder.Focus(FocusState.Keyboard);
+                this.keyholder.LostFocus += (s, e) => this.keyholder.Focus(FocusState.Keyboard);
+                this.keyholder.IsTabStop = true;
+            };
         }
 
         private async void Stage_clock(object sender, EventArgs e)
@@ -40,7 +44,14 @@ namespace Invader
                     this.Frame.Navigate(typeof(End));
                 });
             } 
-               
+            else if (stage.state != Def.State.Title)
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                {
+                    this.Frame.Navigate(typeof(GameScreen));
+                });
+            }
+
         }
 
         private void keyPressed(object sender, KeyRoutedEventArgs e)

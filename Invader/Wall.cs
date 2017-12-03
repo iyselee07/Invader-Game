@@ -27,6 +27,7 @@ namespace Invader
                 return;
             }
             exist.remove(this);
+            dying.add(this);
         }
 
         public static void makeTemplateDefenceWall()

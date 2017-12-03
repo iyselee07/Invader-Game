@@ -71,10 +71,45 @@ namespace Invader
 
     }
 
+    class DyingExistence
+    {
+        private static DyingExistence singleton = new DyingExistence();
+        private static List<GameObject> gmObjList;
+
+        private DyingExistence()
+        {
+            gmObjList = new List<GameObject>();
+        }
+
+        public static DyingExistence getInstance()
+        {
+            return singleton;
+        }
+
+        public void add(GameObject item)
+        {
+            gmObjList.Add(item);
+        }
+
+        public void remove(GameObject item)
+        {
+            gmObjList.Remove(item);
+        }
+        public IEnumerable<GameObject> iterate()
+        {
+            foreach (GameObject item in gmObjList)
+            {
+                yield return item;
+            }
+        }
+    }
+
+
     abstract class GameObject : IhaveRange, IbeDamaged
     {
         public Vector2 position { protected set;  get; }
         protected Existence exist = Existence.getInstance();
+        protected DyingExistence dying = DyingExistence.getInstance();
         public int teamID { get; protected set; }
         public Area hitBox { get; set; }
         public abstract void beDamaged();

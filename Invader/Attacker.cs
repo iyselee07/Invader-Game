@@ -74,6 +74,7 @@ namespace Invader
         public override void beDamaged()
         {
             exist.remove(this);
+            dying.add(this);
             ShotDownEventHandler handler = shotDown;
             if (handler != null)
             {

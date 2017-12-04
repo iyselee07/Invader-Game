@@ -120,10 +120,10 @@ namespace Invader
         protected Vector2 nextPosition;
         public virtual void move()
         {
-            position = nextPosition;
             Vector2 diff = nextPosition - position;
             hitBox.start += diff;
             hitBox.end += diff;
+            position = nextPosition;
         }
 
         public virtual void setNextPos(Vector2 next)
@@ -133,8 +133,12 @@ namespace Invader
 
         public void setInitialPosition(Vector2 pos)
         {
+            Vector2 diff = pos - position;
+            hitBox.start += diff;
+            hitBox.end += diff;
             position = pos;
             nextPosition = pos;
+            
         }
     }
 }

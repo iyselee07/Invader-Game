@@ -11,11 +11,15 @@ namespace Invader
         private List<int> whiteList;
         private Vector2 angle;
         private double velocity;
-
+        private Area existArea;
         public event EventHandler VanishedByHit;
 
         public Bullet(int tID, Vector2 ang, double v, params int[] wlist)
         {
+            Vector2 pos = new Vector2();
+            double width = Def.bulletRange[0], height = Def.bulletRange[1];
+            Vector2 end = new Vector2(pos.x + width, pos.y + height);
+            hitBox = new Area(pos, end);
             teamID = tID;
             angle = ang;
             velocity = v;
@@ -24,6 +28,7 @@ namespace Invader
             {
                 whiteList.Add(items);
             }
+            existArea = new Area(new Vector2(), new Vector2(Def.existWidth, Def.existHeight));
         }
 
         public override void move()
@@ -35,6 +40,10 @@ namespace Invader
             base.move();
             isHitToSomething();
             base.setNextPos(next);
+            if (!existArea.contain(hitBox))
+            {
+                vanish();
+            }
         }
 
         private void isHitToSomething()

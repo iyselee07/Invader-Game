@@ -32,7 +32,9 @@ namespace Invader
                 this.keyholder.Focus(FocusState.Keyboard);
                 this.keyholder.LostFocus += (s, e) => this.keyholder.Focus(FocusState.Keyboard);
                 this.keyholder.IsTabStop = true;
+                //Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryResizeView(new Size { Width = Def.existWidth, Height = Def.existHeight });
             };
+            
         }
 
         private async void Stage_clock(object sender, EventArgs e)
@@ -43,7 +45,7 @@ namespace Invader
                 {
                     this.Frame.Navigate(typeof(End));
                 });
-            } 
+            }
             else if (stage.state != Def.State.Title)
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
@@ -54,31 +56,14 @@ namespace Invader
 
         }
 
-        private void keyPressed(object sender, KeyRoutedEventArgs e)
-        {
-            stage.interactByKeyPress(sender, e);
-        }
-
-        private void keyReleased(object sender, KeyRoutedEventArgs e)
-        {
-            stage.interactByKeyRelease(sender, e);
-        }
-
         private void Grid_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             stage.interactByKeyPress(sender, e);
-            textBlock.Text = e.Key.ToString();
         }
 
         private void Grid_KeyUp(object sender, KeyRoutedEventArgs e)
         {
             stage.interactByKeyRelease(sender, e);
-        }
-
-        private void Page_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            stage.interactByKeyPress(sender, e);
-            textBlock.Text = e.Key.ToString();
         }
     }
 }

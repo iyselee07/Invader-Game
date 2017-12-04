@@ -63,7 +63,7 @@ namespace Invader
             }
         }
 
-        private Task syncObjToImg()
+        private void syncObjToImg()
         {
             
         }
@@ -82,6 +82,16 @@ namespace Invader
     class GameObjectImage
     {
         public Image displayImage { private set; get; }
+        private int animateSpan, animateCount;
+        private int dyingSpan, dyingCount;
+        public bool isDyingLoop { private set; get; }
+        private Canvas canvas;
 
+
+        public GameObjectImage()
+        {
+            displayImage = new Image();
+            displayImage.Source = new ImageSource();
+        }
     }
 }

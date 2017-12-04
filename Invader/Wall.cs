@@ -8,7 +8,7 @@ namespace Invader
 {
     class Wall:GameObject
     {
-        int hitPoint;
+        public int hitPoint { protected set; get; }
         public Wall(Vector2 pos, double width, double height, int HP)
         {
             position =  pos;

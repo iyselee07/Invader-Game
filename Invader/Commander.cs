@@ -425,6 +425,7 @@ namespace Invader
             }
             squad.Add(attacker);
             attacker.shotDown += Attacker_shotDown;
+            electLeader();
             updateSquadBox();
         }
 

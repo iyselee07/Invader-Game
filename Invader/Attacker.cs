@@ -74,6 +74,7 @@ namespace Invader
         public override void beDamaged()
         {
             exist.remove(this);
+            dying.add(this);
             ShotDownEventHandler handler = shotDown;
             if (handler != null)
             {
@@ -147,6 +148,7 @@ namespace Invader
             position = nextPosition = pos;
             bulletVelocity = Def.bulletSpeed;
             bulletInitHeight = Def.playerShotInitialHeight;
+            fireBullets = new List<Bullet>();
             Vector2 end = new Vector2(pos.x + width, pos.y + height);
             hitBox = new Area(pos, end);
             shotAngle = new Vector2(0.0, -1.0);
@@ -160,6 +162,7 @@ namespace Invader
             position = nextPosition = pos;
             bulletVelocity = Def.bulletSpeed;
             bulletInitHeight = Def.playerShotInitialHeight;
+            fireBullets = new List<Bullet>();
             double width = Def.playerRange[0], height = Def.playerRange[1];
             Vector2 end = new Vector2(pos.x + width, pos.y + height);
             hitBox = new Area(pos, end);

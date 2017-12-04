@@ -69,6 +69,7 @@ namespace Invader
         public void vanish()
         {
             exist.remove(this);
+            dying.add(this);
             EventHandler handler = VanishedByHit;
             if(handler != null)
             {

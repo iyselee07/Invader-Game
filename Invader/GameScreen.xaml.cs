@@ -12,20 +12,25 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
 
-// 空白ページのアイテム テンプレートについては、http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 を参照してください
+// 空白ページのアイテム テンプレートについては、http://go.microsoft.com/fwlink/?LinkId=234238 を参照してください
 
 namespace Invader
 {
     /// <summary>
     /// それ自体で使用できる空白ページまたはフレーム内に移動できる空白ページ。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class GameScreen : Page
     {
-        private Stage stage;
-        public MainPage()
+        Stage stage;
+        Existence exist;
+        DyingExistence dying;
+        public GameScreen()
         {
             this.InitializeComponent();
+            exist = Existence.getInstance();
+            dying = DyingExistence.getInstance();
             stage = Stage.getInstance();
             stage.clock += Stage_clock;
             this.Loaded += delegate {
@@ -34,26 +39,33 @@ namespace Invader
                 this.keyholder.IsTabStop = true;
                 //Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryResizeView(new Size { Width = Def.existWidth, Height = Def.existHeight });
             };
-            
         }
 
         private async void Stage_clock(object sender, EventArgs e)
         {
-            if (stage.state == Def.State.End)
+            switch (stage.state)
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                {
-                    this.Frame.Navigate(typeof(End));
-                });
-            }
-            else if (stage.state != Def.State.Title)
-            {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                {
-                    this.Frame.Navigate(typeof(GameScreen));
-                });
-            }
+                case Def.State.GameOver:
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                    {
+                        this.Frame.Navigate(typeof(GameOver));
+                    });
+                    break;
+                case Def.State.BeShotDown:
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                    {
+                        this.Frame.Navigate(typeof(ShotDown));
+                    });
+                    break;
+                case Def.State.InGame:
 
+                    break;
+            }
+        }
+
+        private Task syncObjToImg()
+        {
+            
         }
 
         private void Grid_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -65,5 +77,11 @@ namespace Invader
         {
             stage.interactByKeyRelease(sender, e);
         }
+    }
+
+    class GameObjectImage
+    {
+        public Image displayImage { private set; get; }
+
     }
 }

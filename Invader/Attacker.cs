@@ -56,6 +56,7 @@ namespace Invader
             }
             Bullet bullet = new Bullet(teamID, shotAngle, bulletVelocity, friendly);
             Vector2 centerVec = hitBox.start + hitBox.end / 2.0;
+            centerVec.x -= Def.bulletRange[0];
             centerVec.y = bulletInitHeight;
             bullet.setInitialPosition(centerVec);
             bullet.VanishedByHit += Bullet_VanishedByHit;

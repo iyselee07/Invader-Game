@@ -8,8 +8,9 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" KeyDown="Grid_KeyDown" KeyUp="Grid_KeyUp">
-        <Canvas HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="360">
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="360" Background="Black">
             <local:KeyHolder x:Name="keyholder" Height="1" Canvas.Left="131" Canvas.Top="186" Width="1"/>
+            
         </Canvas>
 
     </Grid>

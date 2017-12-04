@@ -131,6 +131,19 @@
     <None Include="Invader_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Image\B.png" />
+    <Content Include="Image\E1-1.png" />
+    <Content Include="Image\E1-2.png" />
+    <Content Include="Image\E2-1.png" />
+    <Content Include="Image\E2-2.png" />
+    <Content Include="Image\E3-1.png" />
+    <Content Include="Image\E3-2.png" />
+    <Content Include="Image\ESD.png" />
+    <Content Include="Image\P-1.png" />
+    <Content Include="Image\W1.png" />
+    <Content Include="Image\W2.png" />
+    <Content Include="Image\W3.png" />
+    <Content Include="Image\W4.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -170,6 +183,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

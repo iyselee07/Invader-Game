@@ -12,8 +12,9 @@ namespace Invader
         public enum ObjectID { PlayerID, EnemyID, ObjectID };
         public enum State {Title, EnemyInit, PlayerInit, InGame, BeShotDown, GameOver, Init, End};
         // difine attacker size
-        public static readonly double[,] enemyRange =  new double[3, 2] {{100.0, 200.0 },{100.0, 100.0},{300.0, 300.0} };
-        public static readonly double[] playerRange = new double[2] { 100.0, 200.0 };
+        public static readonly double[,] enemyRange =  new double[3, 2] {{24.0, 16.0 },{22.0, 16.0},{16.0, 16.0} };
+        public static readonly double[] playerRange = new double[2] { 32.0, 16.0 };
+        public static readonly double[] bulletRange = new double[2] { 4.0, 16.0 };
         // initial row position for each attackers that belong to template squad 
         public static readonly double[] startRowHight = new double[9] {100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0};
 
@@ -38,6 +39,9 @@ namespace Invader
         public static readonly List<Vector2> wallTeam = new List<Vector2>(5) { new Vector2(0.0, 0.0),  new Vector2(0.0, wallSize), new Vector2(wallSize, wallSize), new Vector2(wallSize * 2.0, wallSize), new Vector2(wallSize * 2.0, 0.0) };
 
         public const int shotdownTime = 1000 * 1;
+        public const int playerAnimateCycle = 0, playerDyingCycle = 1000;
+        public const int enemyAnimateCycle = 30, enemyDyingCycle = 10;
+        //public const int enemyAnimateCycle = 30, enemyDyingCycle = 10;
     }
 
 

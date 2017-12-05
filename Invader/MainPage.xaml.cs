@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // 空白ページのアイテム テンプレートについては、http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 を参照してください
@@ -33,8 +34,23 @@ namespace Invader
                 this.keyholder.LostFocus += (s, e) => this.keyholder.Focus(FocusState.Keyboard);
                 this.keyholder.IsTabStop = true;
                 //Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryResizeView(new Size { Width = Def.existWidth, Height = Def.existHeight });
+                Image image = new Image();
+                canvas.Children.Add(image);
+                BitmapImage bImg;
+                Uri uri;
+                //bImg = new BitmapImage();
+                uri = new Uri(image.BaseUri, "/Image/E1-1.png");
+                //bImg.UriSource = uri;
+                bImg = new BitmapImage(uri);
+                image.Width = 100;
+                image.Height = 100;
+                image.Source = bImg;
+
+                Canvas.SetLeft(image, 100.0);
+                Canvas.SetTop(image, 100.0);
             };
             
+
         }
 
         private async void Stage_clock(object sender, EventArgs e)

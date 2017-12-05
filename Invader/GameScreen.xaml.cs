@@ -95,6 +95,7 @@ namespace Invader
                             img = new Image();
                             gmObjImg = new GameObjectImage(canvas, gmObj, img);
                             display.Add(gmObj, gmObjImg);
+                            //display[gmObj] = gmObjImg;
                         });
                    // });
                     //tasks.Add(task);

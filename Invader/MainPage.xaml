@@ -11,6 +11,7 @@
         <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="360" >
             <TextBlock x:Name="textBlock" Canvas.Left="150" TextWrapping="Wrap" Text="TitleLogo" Canvas.Top="140" />
             <local:KeyHolder x:Name="keyholder" Canvas.Left="150"  Canvas.Top="140" />
+            <Image x:Name="image" Height="16" Canvas.Left="165" Canvas.Top="249" Width="22" Source="Image/E2-1.png"/>
         </Canvas>
 
     </Grid>

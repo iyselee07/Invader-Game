@@ -26,6 +26,7 @@ namespace Invader
     /// </summary>
     public sealed partial class GameScreen : Page
     {
+        private Object thislock = new Object();
         private Stage stage;
         private Existence exist;
         private DyingExistence dying;
@@ -68,52 +69,66 @@ namespace Invader
             }
         }
 
-        private async Task<int> displayImage()
+        private Task displayImage()
         {
-            //List<Task> tasks = new List<Task>();
+            List<Task> tasks = new List<Task>();
             foreach (GameObject gmObj in exist.iterate())
             {
                 GameObjectImage gmObjImg;
-                try
+                lock (thislock)
                 {
-                    gmObjImg = display[gmObj];
-                    //Task task = Task.Run(async () => {
-                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                    try
+                    {
+                        gmObjImg = display[gmObj];
+                        Task task = Task.Run(async () =>
                         {
-                            gmObjImg.animate();
+                            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                            {
+                                gmObjImg.animate();
+                            });
                         });
-                    //});
-                    //tasks.Add(task);
-                }
-                catch (KeyNotFoundException)
-                { 
-                   // Task task = Task.Run(async () => {
-                        
-                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                        tasks.Add(task);
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        Task task = Task.Run(async () =>
                         {
-                            Image img;
-                            img = new Image();
-                            gmObjImg = new GameObjectImage(canvas, gmObj, img);
-                            display.Add(gmObj, gmObjImg);
-                            //display[gmObj] = gmObjImg;
+
+                            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                            {
+                                Image img;
+                                img = new Image();
+                                canvas.Children.Add(img);
+                                gmObjImg = new GameObjectImage(canvas, gmObj, img);
+                                display.Add(gmObj, gmObjImg);
+
+
+
+                                display[gmObj] = gmObjImg;
+                            });
                         });
-                   // });
-                    //tasks.Add(task);
+                        tasks.Add(task);
+                    }
                 }
 
             }
             foreach (GameObject gmObj in dying.iterate())
             {
-                GameObjectImage gmObjImg = display[gmObj];
-                //Task task = Task.Run(async () => {
-                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                lock (thislock)
+                {
+                    GameObjectImage gmObjImg = display[gmObj];
+
+                    Task task = Task.Run(async () =>
                     {
-                        gmObjImg.dying();
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                        {
+                            gmObjImg.dying();
+                        });
                     });
-                //});
-                //tasks.Add(task);
+                    tasks.Add(task);
+                }
             }
-            return 1;//Task.WhenAll(tasks);
+            return Task.WhenAll(tasks);
         }
 
         private void Grid_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -166,14 +181,8 @@ namespace Invader
                 dyingCycle = Def.playerDyingCycle;
                 // isDyingLoop = true;
                 isDyingLoop = false;
-                BitmapImage bImg = new BitmapImage();
-                Uri uri = new Uri(displayImage.BaseUri, "Image/P-1.png");
-                bImg.UriSource = uri;
-                changeImages.Add(bImg);
-                bImg = new BitmapImage();
-                uri = new Uri(displayImage.BaseUri, "Image/ESD.png");
-                bImg.UriSource = uri;
-                dyingAnimation.Add(bImg);
+                changeImages.Add(Def.bImgP1);
+                dyingAnimation.Add(Def.bImgESD);
                 displayImage.Source = changeImages[0];
                 displayImage.Width = Def.playerRange[0];
                 displayImage.Height = Def.playerRange[1];
@@ -185,45 +194,22 @@ namespace Invader
                 animateCycle = Def.enemyAnimateCycle;
                 dyingCycle = Def.enemyDyingCycle;
                 isDyingLoop = false;
-                BitmapImage bImg;
-                Uri uri;
                 switch (eType)
                 {
                     case 0:
-                        bImg = new BitmapImage();
-                        uri = new Uri(displayImage.BaseUri, "Image/E1-1.png");
-                        bImg.UriSource = uri;
-                        changeImages.Add(bImg);
-                        bImg = new BitmapImage();
-                        uri = new Uri(displayImage.BaseUri, "Image/E1-2.png");
-                        bImg.UriSource = uri;
-                        changeImages.Add(bImg);
+                        changeImages.Add(Def.bImgE1_1);
+                        changeImages.Add(Def.bImgE1_2);
                         break;
                     case 1:
-                        bImg = new BitmapImage();
-                        uri = new Uri(displayImage.BaseUri, "Image/E2-1.png");
-                        bImg.UriSource = uri;
-                        changeImages.Add(bImg);
-                        bImg = new BitmapImage();
-                        uri = new Uri(displayImage.BaseUri, "Image/E2-2.png");
-                        bImg.UriSource = uri;
-                        changeImages.Add(bImg);
+                        changeImages.Add(Def.bImgE2_1);
+                        changeImages.Add(Def.bImgE2_2);
                         break;
                     case 2:
-                        bImg = new BitmapImage();
-                        uri = new Uri(displayImage.BaseUri, "Image/E3-1.png");
-                        bImg.UriSource = uri;
-                        changeImages.Add(bImg);
-                        bImg = new BitmapImage();
-                        uri = new Uri(displayImage.BaseUri, "Image/E3-2.png");
-                        bImg.UriSource = uri;
-                        changeImages.Add(bImg);
+                        changeImages.Add(Def.bImgE3_1);
+                        changeImages.Add(Def.bImgE3_2);
                         break;
                 }
-                bImg = new BitmapImage();
-                uri = new Uri(displayImage.BaseUri, "Image/ESD.png");
-                bImg.UriSource = uri;
-                dyingAnimation.Add(bImg);
+                dyingAnimation.Add(Def.bImgESD);
                 displayImage.Source = changeImages[0];
                 displayImage.Width = Def.enemyRange[eType, 0];
                 displayImage.Height = Def.enemyRange[eType, 1];
@@ -234,10 +220,7 @@ namespace Invader
                 animateCycle = 0;
                 dyingCycle = 0;
                 isDyingLoop = false;
-                BitmapImage bImg = new BitmapImage();
-                Uri uri = new Uri(displayImage.BaseUri, "Image/B.png");
-                bImg.UriSource = uri;
-                changeImages.Add(bImg);
+                changeImages.Add(Def.bImgB);
                 displayImage.Source = changeImages[0];
                 displayImage.Width = Def.bulletRange[0];
                 displayImage.Height = Def.bulletRange[1];
@@ -248,21 +231,10 @@ namespace Invader
                 animateCycle = 0;
                 dyingCycle = 0;
                 isDyingLoop = false;
-                BitmapImage bImg;
-                Uri uri;
-                bImg = new BitmapImage();
-                uri = new Uri(displayImage.BaseUri, "Image/W1.png");
-                bImg.UriSource = uri;
-                changeImages.Add(bImg);
-                uri = new Uri(displayImage.BaseUri, "Image/W2.png");
-                bImg.UriSource = uri;
-                changeImages.Add(bImg);
-                uri = new Uri(displayImage.BaseUri, "Image/W3.png");
-                bImg.UriSource = uri;
-                changeImages.Add(bImg);
-                uri = new Uri(displayImage.BaseUri, "Image/W4.png");
-                bImg.UriSource = uri;
-                changeImages.Add(bImg);
+                changeImages.Add(Def.bImgW1);
+                changeImages.Add(Def.bImgW2);
+                changeImages.Add(Def.bImgW3);
+                changeImages.Add(Def.bImgW4);
                 displayImage.Source = changeImages[0];
                 displayImage.Width = Def.wallSize;
                 displayImage.Height = Def.wallSize;

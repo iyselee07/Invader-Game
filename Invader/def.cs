@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 using System.Threading.Tasks;
 
 namespace Invader
@@ -42,6 +44,22 @@ namespace Invader
         public const int playerAnimateCycle = 0, playerDyingCycle = 1000;
         public const int enemyAnimateCycle = 30, enemyDyingCycle = 10;
         //public const int enemyAnimateCycle = 30, enemyDyingCycle = 10;
+
+        public readonly static BitmapImage bImgE1_1 = new BitmapImage(new Uri("ms-appx:///Image/E1-1.png"));
+        public readonly static BitmapImage bImgE1_2 = new BitmapImage(new Uri("ms-appx:///Image/E1-2.png"));
+        public readonly static BitmapImage bImgE2_1 = new BitmapImage(new Uri("ms-appx:///Image/E2-1.png"));
+        public readonly static BitmapImage bImgE2_2 = new BitmapImage(new Uri("ms-appx:///Image/E2-2.png"));
+        public readonly static BitmapImage bImgE3_1 = new BitmapImage(new Uri("ms-appx:///Image/E3-1.png"));
+        public readonly static BitmapImage bImgE3_2 = new BitmapImage(new Uri("ms-appx:///Image/E3-2.png"));
+        public readonly static BitmapImage bImgP1 = new BitmapImage(new Uri("ms-appx:///Image/P-1.png"));
+        public readonly static BitmapImage bImgW1 = new BitmapImage(new Uri("ms-appx:///Image/W1.png"));
+        public readonly static BitmapImage bImgW2 = new BitmapImage(new Uri("ms-appx:///Image/W2.png"));
+        public readonly static BitmapImage bImgW3 = new BitmapImage(new Uri("ms-appx:///Image/W3.png"));
+        public readonly static BitmapImage bImgW4 = new BitmapImage(new Uri("ms-appx:///Image/W4.png"));
+        public readonly static BitmapImage bImgB = new BitmapImage(new Uri("ms-appx:///Image/B.png"));
+        public readonly static BitmapImage bImgESD = new BitmapImage(new Uri("ms-appx:///Image/ESD.png"));
+
+
     }
 
 

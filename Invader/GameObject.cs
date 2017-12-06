@@ -26,6 +26,7 @@ namespace Invader
     {
         private static Existence singleton = new Existence();
         private static List<GameObject> gmObjList;
+        public int count { get { return gmObjList.Count; } }
         private Existence()
         {
             gmObjList = new List<GameObject>();
@@ -46,20 +47,33 @@ namespace Invader
             gmObjList.Remove(item);
         }
 
-        public Task moveAll()
+        public void moveAll()
         {
-            List<Task> tasks = new List<Task>();
             foreach (GameObject item in gmObjList)
             {
                 if (item is MovableObject)
                 {
                     MovableObject mvObj = item as MovableObject;
-                    Task task = Task.Run(() => { mvObj.move(); });
-                    tasks.Add(task);
+                    mvObj.move();
                 }
             }
-            return Task.WhenAll(tasks);
         }
+
+
+        //public Task moveAll()
+        //{
+        //    List<Task> tasks = new List<Task>();
+        //    foreach (GameObject item in gmObjList)
+        //    {
+        //        if (item is MovableObject)
+        //        {
+        //            MovableObject mvObj = item as MovableObject;
+        //            Task task = Task.Run(() => { mvObj.move(); });
+        //            tasks.Add(task);
+        //        }
+        //    }
+        //    return Task.WhenAll(tasks);
+        //}
 
         public IEnumerable<GameObject> iterate()
         {
@@ -75,7 +89,7 @@ namespace Invader
     {
         private static DyingExistence singleton = new DyingExistence();
         private static List<GameObject> gmObjList;
-
+        public int count { get { return gmObjList.Count; } }
         private DyingExistence()
         {
             gmObjList = new List<GameObject>();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Input;
 using Windows.System.Threading;
@@ -12,7 +13,8 @@ namespace Invader
     {
         private PlayerCommander pCommander;
         private EnemyCommander eCommander;
-        private ThreadPoolTimer timer;
+        //private ThreadPoolTimer timer;
+        private Timer timer;
         private SortedDictionary<string, bool> moveDic = new SortedDictionary<string, bool>() {{"left", false}, {"right", false}};
         private bool currentSpace = false, previousSpace = false, oneShot = false;
         public Def.State state { private set; get; }
@@ -30,7 +32,12 @@ namespace Invader
             stageNum = 1;
             pCommander = new PlayerCommander();
             pCommander.lost += PCommander_lost;
-            timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(timerEvent), TimeSpan.FromMilliseconds(Def.frameSpan));
+            TimerCallback callback = state =>
+            {
+                timerEvent();
+            };
+            //timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(timerEvent), TimeSpan.FromMilliseconds(Def.frameSpan));
+            timer = new Timer(callback, null, 0, Def.frameSpan);
         }
 
         public static Stage getInstance()
@@ -38,7 +45,10 @@ namespace Invader
             return singleton;
         }
 
-        private async void timerEvent(ThreadPoolTimer timer)
+
+
+        //private async void timerEvent(ThreadPoolTimer timer)
+        private async void timerEvent()
         {
             switch (state)
             {
@@ -81,11 +91,11 @@ namespace Invader
                     }
                     break; 
             }
-            EventHandler handler = clock;
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            //EventHandler handler = clock;
+            //if (handler != null)
+            //{
+            //    handler(this, EventArgs.Empty);
+            //}
         }
 
 

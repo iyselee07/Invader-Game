@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -24,11 +25,14 @@ namespace Invader
     public sealed partial class MainPage : Page
     {
         private Stage stage;
+        private Timer timer;
         public MainPage()
         {
             this.InitializeComponent();
             stage = Stage.getInstance();
-            stage.clock += Stage_clock;
+            TimerCallback callback = state => { Stage_clock(state); };
+            timer = new Timer(callback, null, 0, Def.frameSpan);
+            //stage.clock += Stage_clock;
             this.Loaded += delegate {
                 this.keyholder.Focus(FocusState.Keyboard);
                 this.keyholder.LostFocus += (s, e) => this.keyholder.Focus(FocusState.Keyboard);
@@ -47,7 +51,8 @@ namespace Invader
 
         }
 
-        private async void Stage_clock(object sender, EventArgs e)
+        //private async void Stage_clock(object sender, EventArgs e)
+        private async void Stage_clock(object sender)
         {
             if (stage.state == Def.State.End)
             {

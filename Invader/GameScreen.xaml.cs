@@ -31,6 +31,7 @@ namespace Invader
         private Existence exist;
         private DyingExistence dying;
         private Dictionary<GameObject, GameObjectImage> display;
+        private Timer timer;
         public GameScreen()
         {
             this.InitializeComponent();
@@ -38,7 +39,9 @@ namespace Invader
             dying = DyingExistence.getInstance();
             stage = Stage.getInstance();
             display = new Dictionary<GameObject, GameObjectImage>();
-            stage.clock += Stage_clock;
+            //stage.clock += Stage_clock;
+            TimerCallback callback = state => { Stage_clock(state); };
+            timer = new Timer(callback, null, 0, Def.frameSpan);
             this.Loaded += delegate {
                 this.keyholder.Focus(FocusState.Keyboard);
                 this.keyholder.LostFocus += (s, e) => this.keyholder.Focus(FocusState.Keyboard);
@@ -47,7 +50,8 @@ namespace Invader
             };
         }
 
-        private async void Stage_clock(object sender, EventArgs e)
+        //private async void Stage_clock(object sender, EventArgs e)
+        private async void Stage_clock(object sender)
         {
             switch (stage.state)
             {
@@ -75,11 +79,13 @@ namespace Invader
             foreach (GameObject gmObj in exist.iterate())
             {
                 GameObjectImage gmObjImg;
+                bool isAlreadyAdded;
                 lock (thislock)
                 {
-                    try
+                    isAlreadyAdded = display.TryGetValue(gmObj, out gmObjImg);
+
+                    if (isAlreadyAdded)
                     {
-                        gmObjImg = display[gmObj];
                         Task task = Task.Run(async () =>
                         {
                             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
@@ -89,7 +95,7 @@ namespace Invader
                         });
                         tasks.Add(task);
                     }
-                    catch (KeyNotFoundException)
+                    else
                     {
                         Task task = Task.Run(async () =>
                         {
@@ -101,23 +107,20 @@ namespace Invader
                                 canvas.Children.Add(img);
                                 gmObjImg = new GameObjectImage(canvas, gmObj, img);
                                 display.Add(gmObj, gmObjImg);
-
-
-
                                 display[gmObj] = gmObjImg;
                             });
                         });
                         tasks.Add(task);
                     }
                 }
-
             }
             foreach (GameObject gmObj in dying.iterate())
             {
+                GameObjectImage gmObjImg;
                 lock (thislock)
                 {
-                    GameObjectImage gmObjImg = display[gmObj];
-
+                    gmObjImg = display[gmObj];
+                }
                     Task task = Task.Run(async () =>
                     {
                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
@@ -126,7 +129,7 @@ namespace Invader
                         });
                     });
                     tasks.Add(task);
-                }
+                
             }
             return Task.WhenAll(tasks);
         }
@@ -163,7 +166,7 @@ namespace Invader
             dyingCount = 0;
             initialdeath = true;
             imageState = 0;
-            canvas.Children.Add(displayImage);
+            //canvas.Children.Add(displayImage);
             changeImages = new List<BitmapImage>();
             dyingAnimation = new List<BitmapImage>();
             this.gmObj = gmObj;

@@ -528,7 +528,7 @@ namespace Invader
                 squadBox.start.x = Math.Min(squadBox.start.x, sPos.x);
                 squadBox.start.y = Math.Min(squadBox.start.y, sPos.y);
                 squadBox.end.x = Math.Max(squadBox.end.x, ePos.x);
-                squadBox.end.x = Math.Max(squadBox.end.y, ePos.y);
+                squadBox.end.y = Math.Max(squadBox.end.y, ePos.y);
             }
         }
 

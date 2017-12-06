@@ -8,10 +8,14 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" KeyDown="Grid_KeyDown" KeyUp="Grid_KeyUp">
-        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="360" Background="Black">
+        <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="960" VerticalAlignment="Top" Width="720" Background="Black">
             <local:KeyHolder x:Name="keyholder" Height="1" Canvas.Left="131" Canvas.Top="186" Width="1"/>
-            
+
         </Canvas>
+        <TextBlock x:Name="Existcount" HorizontalAlignment="Left" Margin="808,72,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="Dyingcount" HorizontalAlignment="Left" Margin="808,97,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="enemy" HorizontalAlignment="Left" Margin="808,122,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="player" HorizontalAlignment="Left" Margin="808,147,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>

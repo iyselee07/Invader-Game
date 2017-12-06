@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -28,20 +29,22 @@ namespace Invader
     {
         private Object thislock = new Object();
         private Stage stage;
+        private Timer timer;
         private Existence exist;
         private DyingExistence dying;
-        private Dictionary<GameObject, GameObjectImage> display;
-        private Timer timer;
+        //private Dictionary<GameObject, GameObjectImage> display;
+        private ConcurrentDictionary<GameObject, GameObjectImage> display;
         public GameScreen()
         {
             this.InitializeComponent();
             exist = Existence.getInstance();
             dying = DyingExistence.getInstance();
             stage = Stage.getInstance();
-            display = new Dictionary<GameObject, GameObjectImage>();
+            display = new ConcurrentDictionary<GameObject, GameObjectImage>();
             //stage.clock += Stage_clock;
-            TimerCallback callback = state => { Stage_clock(state); };
+            TimerCallback callback = state => { Stage_clock(); };
             timer = new Timer(callback, null, 0, Def.frameSpan);
+
             this.Loaded += delegate {
                 this.keyholder.Focus(FocusState.Keyboard);
                 this.keyholder.LostFocus += (s, e) => this.keyholder.Focus(FocusState.Keyboard);
@@ -51,7 +54,7 @@ namespace Invader
         }
 
         //private async void Stage_clock(object sender, EventArgs e)
-        private async void Stage_clock(object sender)
+        private async void Stage_clock()
         {
             switch (stage.state)
             {
@@ -73,70 +76,112 @@ namespace Invader
             }
         }
 
+        //private Task displayImage()
+        //{
+        //    List<Task> tasks = new List<Task>();
+        //    foreach (GameObject gmObj in exist.iterate())
+        //    {
+        //    GameObjectImage gmObjImg;
+        //        if (display.TryGetValue(gmObj, out gmObjImg))
+        //        {
+        //            gmObjImg = display[gmObj];
+        //            Task task = Task.Run(async () =>
+        //            {
+        //                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+        //                {
+        //                    gmObjImg.animate();
+        //                });
+        //            });
+        //            tasks.Add(task);
+        //        }
+        //        else 
+        //        {
+        //            Task task = Task.Run(async () =>
+        //            {
+
+        //                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+        //                {
+        //                    Image img;
+        //                    img = new Image();
+        //                    canvas.Children.Add(img);
+        //                    gmObjImg = new GameObjectImage(canvas, gmObj, img);
+        //                    bool isSafe = display.TryAdd(gmObj, gmObjImg);
+        //                    if (false)
+        //                    {
+        //                        throw new Exception();
+        //                    }
+
+
+        //                    //display[gmObj] = gmObjImg;
+        //                });
+        //            });
+        //            tasks.Add(task);
+        //        }
+        //    }
+        //    foreach (GameObject gmObj in dying.iterate())
+        //    {
+
+        //        GameObjectImage gmObjImg = display[gmObj];
+
+        //        Task task = Task.Run(async () =>
+        //        {
+        //            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+        //            {
+        //                gmObjImg.dying();
+        //            });
+        //        });
+        //        tasks.Add(task);
+                
+        //    }
+        //    return Task.WhenAll(tasks);
+        //}
+
         private Task displayImage()
         {
-            List<Task> tasks = new List<Task>();
-            foreach (GameObject gmObj in exist.iterate())
+            Task task = Task.Run(async () =>
             {
-                GameObjectImage gmObjImg;
-                bool isAlreadyAdded;
-                lock (thislock)
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
-                    isAlreadyAdded = display.TryGetValue(gmObj, out gmObjImg);
+                    this.keyholder.Focus(FocusState.Keyboard);
+                    Existcount.Text = Existence.getInstance().count.ToString();
+                    Dyingcount.Text = DyingExistence.getInstance().count.ToString();
+                    player.Text = display.Count.ToString();
 
-                    if (isAlreadyAdded)
-                    {
-                        Task task = Task.Run(async () =>
-                        {
-                            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                            {
-                                gmObjImg.animate();
-                            });
-                        });
-                        tasks.Add(task);
-                    }
-                    else
-                    {
-                        Task task = Task.Run(async () =>
-                        {
 
-                            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                            {
-                                Image img;
-                                img = new Image();
-                                canvas.Children.Add(img);
-                                gmObjImg = new GameObjectImage(canvas, gmObj, img);
-                                display.Add(gmObj, gmObjImg);
-                                display[gmObj] = gmObjImg;
-                            });
-                        });
-                        tasks.Add(task);
-                    }
-                }
-            }
-            foreach (GameObject gmObj in dying.iterate())
-            {
-                GameObjectImage gmObjImg;
-                lock (thislock)
-                {
-                    gmObjImg = display[gmObj];
-                }
-                    Task task = Task.Run(async () =>
+                    foreach (GameObject gmObj in exist.iterate())
                     {
-                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                        GameObjectImage gmObjImg;
+                        if (display.TryGetValue(gmObj, out gmObjImg))
                         {
-                            gmObjImg.dying();
-                        });
-                    });
-                    tasks.Add(task);
-                
-            }
-            return Task.WhenAll(tasks);
+                            gmObjImg.animate();
+                        }
+                        else
+                        {
+                            Image img;
+                            img = new Image();
+                            canvas.Children.Add(img);
+                            gmObjImg = new GameObjectImage(canvas, gmObj, img);
+                            bool isSafe = display.TryAdd(gmObj, gmObjImg);
+                            if (false)
+                            {
+                                throw new Exception();
+                            }
+                        }
+                    }
+                    foreach (GameObject gmObj in dying.iterate())
+                    {
+                        GameObjectImage gmObjImg = display[gmObj];
+                        gmObjImg.dying();
+                    }
+                });
+            });
+            task.Wait();
+            return task;
         }
 
         private void Grid_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            stage.interactByKeyPress(sender, e);
+                stage.interactByKeyPress(sender, e);
         }
 
         private void Grid_KeyUp(object sender, KeyRoutedEventArgs e)

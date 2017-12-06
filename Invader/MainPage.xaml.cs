@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -14,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using System.Threading;
 
 // 空白ページのアイテム テンプレートについては、http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409 を参照してください
 
@@ -30,9 +30,9 @@ namespace Invader
         {
             this.InitializeComponent();
             stage = Stage.getInstance();
-            TimerCallback callback = state => { Stage_clock(state); };
-            timer = new Timer(callback, null, 0, Def.frameSpan);
             //stage.clock += Stage_clock;
+            TimerCallback callback = state => { Stage_clock(); };
+            timer = new Timer(callback, null, 0, Def.frameSpan);
             this.Loaded += delegate {
                 this.keyholder.Focus(FocusState.Keyboard);
                 this.keyholder.LostFocus += (s, e) => this.keyholder.Focus(FocusState.Keyboard);
@@ -52,7 +52,7 @@ namespace Invader
         }
 
         //private async void Stage_clock(object sender, EventArgs e)
-        private async void Stage_clock(object sender)
+        private async void Stage_clock()
         {
             if (stage.state == Def.State.End)
             {
@@ -65,7 +65,9 @@ namespace Invader
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
+                    timer.Change(Timeout.Infinite, Timeout.Infinite);
                     this.Frame.Navigate(typeof(GameScreen));
+                    
                 });
             }
 

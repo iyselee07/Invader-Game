@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Input;
 using Windows.System.Threading;
+using System.Threading;
 
 namespace Invader
 {
@@ -14,7 +14,7 @@ namespace Invader
         private PlayerCommander pCommander;
         private EnemyCommander eCommander;
         //private ThreadPoolTimer timer;
-        private Timer timer;
+        Timer timer;
         private SortedDictionary<string, bool> moveDic = new SortedDictionary<string, bool>() {{"left", false}, {"right", false}};
         private bool currentSpace = false, previousSpace = false, oneShot = false;
         public Def.State state { private set; get; }
@@ -32,32 +32,27 @@ namespace Invader
             stageNum = 1;
             pCommander = new PlayerCommander();
             pCommander.lost += PCommander_lost;
-            TimerCallback callback = state =>
-            {
-                timerEvent();
-            };
             //timer = ThreadPoolTimer.CreatePeriodicTimer(new TimerElapsedHandler(timerEvent), TimeSpan.FromMilliseconds(Def.frameSpan));
+            TimerCallback callback = state => { timerEvent(); };
             timer = new Timer(callback, null, 0, Def.frameSpan);
-        }
 
+        }
         public static Stage getInstance()
         {
             return singleton;
         }
 
-
-
-        //private async void timerEvent(ThreadPoolTimer timer)
-        private async void timerEvent()
+        //private void timerEvent(ThreadPoolTimer timer)
+        private void timerEvent()
         {
             switch (state)
             {
                 case Def.State.EnemyInit:
+                    state = Def.State.PlayerInit;
                     eCommander = new EnemyCommander(stageNum);
                     eCommander.lost += ECommander_lost;
                     eCommander.won += ECommander_won;
                     Wall.makeTemplateDefenceWall();
-                    state = Def.State.PlayerInit;
                     break;
                 case Def.State.PlayerInit:
                     pCommander.organizeAttacker();
@@ -70,7 +65,7 @@ namespace Invader
                     previousSpace = currentSpace;
                     if (oneShot) pCommander.shot();
                     eCommander.invade();
-                    await Existence.getInstance().moveAll();
+                    Existence.getInstance().moveAll();
                     break;
                 case Def.State.BeShotDown:
                     if (shotdownCount <= Def.shotdownTime)
@@ -91,11 +86,6 @@ namespace Invader
                     }
                     break; 
             }
-            //EventHandler handler = clock;
-            //if (handler != null)
-            //{
-            //    handler(this, EventArgs.Empty);
-            //}
         }
 
 

@@ -43,19 +43,23 @@ namespace Invader
 
         public void moveLeft()
         {
-            platoon.moveLeftAll(movingSpeed);
-            if (platoon.platoonBox.start.x < 0.0)
+            if (platoon.platoonBox.start.x >= 0.0)
             {
-                platoon.moveRightAll(movingSpeed);
+                platoon.moveLeftAll(movingSpeed);
             }
+            //platoon.moveLeftAll(movingSpeed);
+            //if (platoon.platoonBox.start.x < 0.0)
+            //{
+            //    platoon.moveRightAll(movingSpeed);
+            //}
         }
 
         public void moveRight()
         {
-            platoon.moveRightAll(movingSpeed);
-            if (platoon.platoonBox.end.x > movingWidth)
+            
+            if (platoon.platoonBox.end.x <= movingWidth)
             {
-                platoon.moveLeftAll(movingSpeed);
+                platoon.moveRightAll(movingSpeed);
             }
         }
 
@@ -264,42 +268,42 @@ namespace Invader
 
         public void moveRightAll(double step)
         {
+            Vector2 diff = new Vector2(step, 0.0);
+            movePlatoonBox(diff);
             foreach (Squad item in platoon)
             {
                 item.moveRightAll(step);
             }
-            Vector2 diff = new Vector2(step, 0.0);
-            movePlatoonBox(diff);
         }
 
         public void moveLeftAll(double step)
         {
+            Vector2 diff = new Vector2(-step, 0.0);
+            movePlatoonBox(diff);
             foreach (Squad item in platoon)
             {
                 item.moveLeftAll(step);
             }
-            Vector2 diff = new Vector2(-step, 0.0);
-            movePlatoonBox(diff);
         }
 
         public void moveUpAll(double step)
         {
+            Vector2 diff = new Vector2(0.0, -step);
+            movePlatoonBox(diff);
             foreach (Squad item in platoon)
             {
                 item.moveUpAll(step);
             }
-            Vector2 diff = new Vector2(0.0, -step);
-            movePlatoonBox(diff);
         }
 
         public void moveDownAll(double step)
         {
+            Vector2 diff = new Vector2(0.0, step);
+            movePlatoonBox(diff);
             foreach (Squad item in platoon)
             {
                 item.moveDownAll(step);
             }
-            Vector2 diff = new Vector2(0.0, step);
-            movePlatoonBox(diff);
         }
 
 
@@ -311,13 +315,18 @@ namespace Invader
 
         private void updatePlatoonBox()
         {
+
+            platoonBox.start.x = double.MaxValue;
+            platoonBox.start.y = double.MaxValue;
+            platoonBox.end.x = double.MinValue;
+            platoonBox.end.y = double.MinValue;
             foreach (Squad item in platoon)
             {
                 Vector2 sPos = item.squadBox.start, ePos = item.squadBox.end;
                 platoonBox.start.x = Math.Min(platoonBox.start.x, sPos.x);
                 platoonBox.start.y = Math.Min(platoonBox.start.y, sPos.y);
                 platoonBox.end.x = Math.Max(platoonBox.end.x, ePos.x);
-                platoonBox.end.x = Math.Max(platoonBox.end.y, ePos.y);
+                platoonBox.end.y = Math.Max(platoonBox.end.y, ePos.y);
             }
         }
 
@@ -476,42 +485,42 @@ namespace Invader
 
         public void moveRightAll(double step)
         {
-            foreach(Attacker item in squad)
+            Vector2 diff = new Vector2(step, 0.0);
+            moveSquadBox(diff);
+            foreach (Attacker item in squad)
             {
                 item.moveRight(step);
             }
-            Vector2 diff = new Vector2(step, 0.0);
-            moveSquadBox(diff);
         }
 
         public void moveLeftAll(double step)
         {
+            Vector2 diff = new Vector2(-step, 0.0);
+            moveSquadBox(diff);
             foreach (Attacker item in squad)
             {
                 item.moveLeft(step);
             }
-            Vector2 diff = new Vector2(-step, 0.0);
-            moveSquadBox(diff);
         }
 
         public void moveUpAll(double step)
         {
+            Vector2 diff = new Vector2(0.0, -step);
+            moveSquadBox(diff);
             foreach (Attacker item in squad)
             {
                 item.moveUp(step);
             }
-            Vector2 diff = new Vector2(0.0, -step);
-            moveSquadBox(diff);
         }
 
         public void moveDownAll(double step)
         {
+            Vector2 diff = new Vector2(0.0, step);
+            moveSquadBox(diff);
             foreach (Attacker item in squad)
             {
                 item.moveDown(step);
             }
-            Vector2 diff = new Vector2(0.0, step);
-            moveSquadBox(diff);
         }
 
         private void moveSquadBox(Vector2 diff)
@@ -522,7 +531,12 @@ namespace Invader
 
         private void updateSquadBox()
         {
-            foreach(Attacker item in squad)
+
+            squadBox.start.x = double.MaxValue;
+            squadBox.start.y = double.MaxValue;
+            squadBox.end.x = double.MinValue;
+            squadBox.end.y = double.MinValue;
+            foreach (Attacker item in squad)
             {
                 Vector2 sPos = item.hitBox.start, ePos = item.hitBox.end;
                 squadBox.start.x = Math.Min(squadBox.start.x, sPos.x);

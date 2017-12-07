@@ -283,7 +283,7 @@ namespace Invader
                 changeImages.Add(Def.bImgW2);
                 changeImages.Add(Def.bImgW3);
                 changeImages.Add(Def.bImgW4);
-                displayImage.Source = changeImages[0];
+                displayImage.Source = changeImages.First<BitmapImage>();
                 displayImage.Width = Def.wallSize;
                 displayImage.Height = Def.wallSize;
             }
@@ -296,6 +296,8 @@ namespace Invader
                 Wall wall = gmObj as Wall;
                 imageState = Def.wallHP - wall.hitPoint;
                 displayImage.Source = changeImages[imageState];
+                Canvas.SetLeft(displayImage, gmObj.position.x);
+                Canvas.SetTop(displayImage, gmObj.position.y);
                 return;
             }
 

@@ -55,8 +55,9 @@ namespace Invader
                     Wall.makeTemplateDefenceWall();
                     break;
                 case Def.State.PlayerInit:
-                    pCommander.organizeAttacker();
                     state = Def.State.InGame;
+                    pCommander.organizeAttacker();
+                    
                     break;
                 case Def.State.InGame:
                     if (moveDic["left"]) pCommander.moveLeft();

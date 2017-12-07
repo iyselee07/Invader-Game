@@ -66,6 +66,7 @@ namespace Invader
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
                     timer.Change(Timeout.Infinite, Timeout.Infinite);
+                    this.keyholder.LostFocus += (s, e) => { };
                     this.Frame.Navigate(typeof(GameScreen));
                     
                 });
@@ -75,12 +76,18 @@ namespace Invader
 
         private void Grid_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            stage.interactByKeyPress(sender, e);
+            if (stage.state == Def.State.Title)
+            {
+                stage.interactByKeyPress(sender, e);
+            }
         }
 
         private void Grid_KeyUp(object sender, KeyRoutedEventArgs e)
         {
-            stage.interactByKeyRelease(sender, e);
+            if (stage.state == Def.State.Title)
+            {
+                stage.interactByKeyRelease(sender, e);
+            }
         }
     }
 }

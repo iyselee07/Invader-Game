@@ -16,10 +16,10 @@ namespace Invader
 
         public Bullet(int tID, Vector2 ang, double v, params int[] wlist)
         {
-            Vector2 pos = new Vector2();
+            position = new Vector2();
             double width = Def.bulletRange[0], height = Def.bulletRange[1];
-            Vector2 end = new Vector2(pos.x + width, pos.y + height);
-            hitBox = new Area(pos, end);
+            Vector2 end = new Vector2(position.x + width, position.y + height);
+            hitBox = new Area(position, end);
             teamID = tID;
             angle = ang;
             velocity = v;

@@ -9,6 +9,7 @@ namespace Invader
     class PlayerCommander
     {
         private Platoon platoon;
+        private PlayerAttacker pAttacker;
         public int remaining { private set; get; }
         private double movingHight, movingWidth, movingSpeed;
         private Vector2 initialPosition;
@@ -35,8 +36,9 @@ namespace Invader
                 return;
             }
             Squad squad = new Squad(0, 1);
-            PlayerAttacker attacker = new PlayerAttacker(initialPosition, 0);
-            squad.assignAttacker(attacker);
+            //PlayerAttacker attacker = new PlayerAttacker(initialPosition, 0);
+            pAttacker = new PlayerAttacker(initialPosition, 0);
+            squad.assignAttacker(pAttacker);
             platoon.assignSquad(squad);
 
         }
@@ -65,7 +67,7 @@ namespace Invader
 
         public void shot()
         {
-            platoon.randomizeLeaderShot();
+            platoon.firstLeaderShot();
         }
 
 
@@ -235,6 +237,11 @@ namespace Invader
             updatePlatoonBox();
         }
 
+
+        public void firstLeaderShot(params int [] friendly)
+        {
+            platoon[0].makeLeaderShot(friendly);
+        }
 
         public void randomizeLeaderShot(params int[] friendly)
         {

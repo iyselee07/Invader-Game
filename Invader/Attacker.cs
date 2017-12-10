@@ -50,14 +50,14 @@ namespace Invader
 
         public virtual void shot(params int[] friendly)
         {
-            if (fireBullets.Count >= magazineSize)
+            if (fireBullets.Count > magazineSize)
             {
                 return;
             }
             Bullet bullet = new Bullet(teamID, shotAngle, bulletVelocity, friendly);
-            Vector2 centerVec = hitBox.start + hitBox.end / 2.0;
+            Vector2 centerVec = (hitBox.start + hitBox.end) / 2.0;
             centerVec.x -= Def.bulletRange[0];
-            centerVec.y = bulletInitHeight;
+            centerVec.y += bulletInitHeight;
             bullet.setInitialPosition(centerVec);
             bullet.VanishedByHit += Bullet_VanishedByHit;
             exist.add(bullet);
@@ -116,6 +116,8 @@ namespace Invader
             position = nextPosition = pos;
             bulletInitHeight = Def.enemyShotInitialHeight;
             bulletVelocity = Def.bulletSpeed;
+            fireBullets = new List<Bullet>();
+            magazineSize = Def.enemyMagazineSize;
             Vector2 end = new Vector2(pos.x+width, pos.y+height);
             hitBox = new Area(pos, end);
             shotAngle = new Vector2(0.0, 1.0);
@@ -130,6 +132,8 @@ namespace Invader
             enemyType = eType;
             bulletInitHeight = Def.enemyShotInitialHeight;
             bulletVelocity = Def.bulletSpeed;
+            fireBullets = new List<Bullet>();
+            magazineSize = Def.enemyMagazineSize;
             double width = Def.enemyRange[eType, 0], height = Def.enemyRange[eType, 1];
             Vector2 end = new Vector2(pos.x + width, pos.y + height);
             hitBox = new Area(pos, end);
@@ -141,7 +145,6 @@ namespace Invader
     }
 
 
-
     class PlayerAttacker : Attacker
     {
         public PlayerAttacker(Vector2 pos, double width, double height, int aID)
@@ -150,6 +153,7 @@ namespace Invader
             bulletVelocity = Def.bulletSpeed;
             bulletInitHeight = Def.playerShotInitialHeight;
             fireBullets = new List<Bullet>();
+            magazineSize = Def.playerMagazineSize;
             Vector2 end = new Vector2(pos.x + width, pos.y + height);
             hitBox = new Area(pos, end);
             shotAngle = new Vector2(0.0, -1.0);

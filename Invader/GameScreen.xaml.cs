@@ -146,7 +146,7 @@ namespace Invader
                     Existcount.Text = Existence.getInstance().count.ToString();
                     Dyingcount.Text = DyingExistence.getInstance().count.ToString();
                     player.Text = display.Count.ToString();
-
+                    enemy.Text = stage.currentSpace.ToString();
 
                     foreach (GameObject gmObj in exist.iterate())
                     {

@@ -40,9 +40,9 @@ namespace Invader
                 //Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryResizeView(new Size { Width = Def.existWidth, Height = Def.existHeight });
                 Image image = new Image();
                 canvas.Children.Add(image);
-                image.Width = 24;
-                image.Height = 16;
-                image.Source = Def.bImgE1_1;
+                image.Width = 30;
+                image.Height = 30;
+                image.Source = Def.bImgW1;
 
                 Canvas.SetLeft(image, 100.0);
                 Canvas.SetTop(image, 100.0);

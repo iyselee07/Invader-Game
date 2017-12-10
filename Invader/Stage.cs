@@ -16,7 +16,7 @@ namespace Invader
         //private ThreadPoolTimer timer;
         Timer timer;
         private SortedDictionary<string, bool> moveDic = new SortedDictionary<string, bool>() {{"left", false}, {"right", false}};
-        private bool currentSpace = false, previousSpace = false, oneShot = false;
+        public bool currentSpace = false, previousSpace = false, oneShot = false;
         public Def.State state { private set; get; }
         public int stageNum { private set; get; }
 

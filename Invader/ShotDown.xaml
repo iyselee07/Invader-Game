@@ -8,6 +8,7 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="88,110,0,0" TextWrapping="Wrap" Text="You killed yourself" VerticalAlignment="Top" Height="66" Width="177"/>
 
     </Grid>
 </Page>

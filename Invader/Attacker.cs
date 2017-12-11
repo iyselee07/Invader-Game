@@ -115,7 +115,7 @@ namespace Invader
         {
             position = nextPosition = pos;
             bulletInitHeight = Def.enemyShotInitialHeight;
-            bulletVelocity = Def.bulletSpeed;
+            bulletVelocity = Def.enemyBulletSpeed;
             fireBullets = new List<Bullet>();
             magazineSize = Def.enemyMagazineSize;
             Vector2 end = new Vector2(pos.x+width, pos.y+height);
@@ -131,7 +131,7 @@ namespace Invader
             position = nextPosition = pos;
             enemyType = eType;
             bulletInitHeight = Def.enemyShotInitialHeight;
-            bulletVelocity = Def.bulletSpeed;
+            bulletVelocity = Def.enemyBulletSpeed;
             fireBullets = new List<Bullet>();
             magazineSize = Def.enemyMagazineSize;
             double width = Def.enemyRange[eType, 0], height = Def.enemyRange[eType, 1];
@@ -150,7 +150,7 @@ namespace Invader
         public PlayerAttacker(Vector2 pos, double width, double height, int aID)
         {
             position = nextPosition = pos;
-            bulletVelocity = Def.bulletSpeed;
+            bulletVelocity = Def.playerBulletSpeed;
             bulletInitHeight = Def.playerShotInitialHeight;
             fireBullets = new List<Bullet>();
             magazineSize = Def.playerMagazineSize;
@@ -165,7 +165,7 @@ namespace Invader
         public PlayerAttacker(Vector2 pos, int aID)
         {
             position = nextPosition = pos;
-            bulletVelocity = Def.bulletSpeed;
+            bulletVelocity = Def.playerBulletSpeed;
             bulletInitHeight = Def.playerShotInitialHeight;
             fireBullets = new List<Bullet>();
             double width = Def.playerRange[0], height = Def.playerRange[1];

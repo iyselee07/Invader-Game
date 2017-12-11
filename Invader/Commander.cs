@@ -11,9 +11,10 @@ namespace Invader
         private Platoon platoon;
         private PlayerAttacker pAttacker;
         public int remaining { private set; get; }
+        public Vector2 pAttackerCenter { get { return (pAttacker.hitBox.start + pAttacker.hitBox.end) / 2.0; } }
         private double movingHight, movingWidth, movingSpeed;
         private Vector2 initialPosition;
-
+        
         public event EventHandler won;
         public event EventHandler lost;
 
@@ -93,11 +94,14 @@ namespace Invader
     {
         private Platoon platoon;
         private Area invadingArea;
-        private int col = 11, row = 5;
+        private Random attackingRand = new Random();
+        private int col = Def.enemyPlatoonCol, row = Def.enemyPlatoonRow;
         private bool nowGoRight;
 
         private int moveCount, maxCountStep, slowestOffset;
-
+        private int attackCount, attackTiming;
+        private int minAttackCount = Def.leastInvadeAttackCount, maxInvadeAttackCount = Def.maxInvadeAttackCount;
+        private double aimingThreshold = Def.aimingThreshold;
         public event EventHandler lost;
         public event EventHandler won;
 
@@ -112,6 +116,8 @@ namespace Invader
             platoon.Annihilated += Platoon_Annihilated;
             nowGoRight = true;
             moveCount = 0;
+            attackCount = 0;
+            attackTiming = attackingRand.Next(minAttackCount, maxInvadeAttackCount);
             maxCountStep = col * row / Def.InvadeSpeedChange;
             slowestOffset = (Def.maxInvadeSpeedCount - Def.leastInvadeSpeedCount) / maxCountStep;
         }
@@ -127,6 +133,7 @@ namespace Invader
             platoon.Annihilated += Platoon_Annihilated;
             nowGoRight = true;
             moveCount = 0;
+            attackCount = 0;
             maxCountStep = col * row / Def.InvadeSpeedChange;
             slowestOffset = (Def.maxInvadeSpeedCount - Def.leastInvadeSpeedCount) / maxCountStep;
         }
@@ -153,7 +160,32 @@ namespace Invader
             }
         }
 
-        public void invade()
+        public void invade(Vector2 pos, params int[] friendly)
+        {
+            invadeMoving();
+            invadeAttacking(pos, friendly);
+        }
+
+        private void invadeAttacking(Vector2 pos, params int[] friendly)
+        {
+            attackCount++;
+            if (attackCount < attackTiming)
+            {
+                return;
+            }
+            if (attackingRand.NextDouble() < aimingThreshold)
+            {
+                platoon.nearestLeaderShot(pos, friendly);
+            }
+            else
+            {
+                platoon.randomizeLeaderShot(friendly);
+            }
+            attackTiming = attackingRand.Next(minAttackCount, maxInvadeAttackCount);
+            attackCount = 0;
+        }
+
+        private void invadeMoving()
         {
             moveCount++;
             double step = Def.enemyInvade;
@@ -454,6 +486,7 @@ namespace Invader
                 if (firstY < item.position.y)
                 {
                     tmpAttacker = item;
+                    firstY = item.position.y;
                 }
                 squadLeader = tmpAttacker;
             }

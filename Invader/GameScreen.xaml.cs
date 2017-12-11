@@ -61,12 +61,16 @@ namespace Invader
                 case Def.State.GameOver:
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                     {
+                        timer.Change(Timeout.Infinite, Timeout.Infinite);
+                        this.keyholder.LostFocus += (s, e) => { };
                         this.Frame.Navigate(typeof(GameOver));
                     });
                     break;
                 case Def.State.BeShotDown:
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                     {
+                        timer.Change(Timeout.Infinite, Timeout.Infinite);
+                        this.keyholder.LostFocus += (s, e) => { };
                         this.Frame.Navigate(typeof(ShotDown));
                     });
                     break;
@@ -161,6 +165,7 @@ namespace Invader
                             img = new Image();
                             canvas.Children.Add(img);
                             gmObjImg = new GameObjectImage(canvas, gmObj, img);
+                            gmObjImg.canDispose += GmObjImg_canDispose;
                             bool isSafe = display.TryAdd(gmObj, gmObjImg);
                             if (false)
                             {
@@ -177,6 +182,12 @@ namespace Invader
             });
             task.Wait();
             return task;
+        }
+
+        private void GmObjImg_canDispose(object sender, EventArgs e)
+        {
+            GameObjectImage gmObjImg = sender as GameObjectImage, tmp;
+            display.TryRemove(gmObjImg.gmObj, out tmp);
         }
 
         private void Grid_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -201,7 +212,9 @@ namespace Invader
         private List<BitmapImage> changeImages;
         private List<BitmapImage> dyingAnimation;
         private Canvas canvas;
-        GameObject gmObj;
+        public GameObject gmObj { private set; get; }
+
+        public event EventHandler canDispose;
 
         public GameObjectImage(Canvas can, GameObject gmObj, Image image)
         {
@@ -327,7 +340,9 @@ namespace Invader
             if (initialdeath)
             {
                 imageState = 0;
+                dyingCount = 0;
                 initialdeath = false;
+                displayImage.Source = dyingAnimation[imageState];
             }
             if (dyingCount >= dyingCycle)
             {
@@ -336,10 +351,15 @@ namespace Invader
                 {
                     canvas.Children.Remove(displayImage);
                     DyingExistence.getInstance().remove(gmObj);
+                    if (canDispose != null)
+                    {
+                        canDispose(this, EventArgs.Empty);
+                    }
                     return;
                 }
-                imageState %= dyingAnimation.Count;
+                imageState++;
                 dyingCount = 0;
+                displayImage.Source = dyingAnimation[imageState];
             }
             else
             {

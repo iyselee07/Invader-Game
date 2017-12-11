@@ -50,7 +50,8 @@ namespace Invader
 
         public void moveAll()
         {
-            foreach (GameObject item in gmObjList)
+            GameObject[] gmObjArr = copyToArray();
+            foreach (GameObject item in gmObjArr)
             {
                 if (item is MovableObject)
                 {
@@ -78,10 +79,18 @@ namespace Invader
 
         public IEnumerable<GameObject> iterate()
         {
-            foreach (GameObject item in gmObjList)
+            GameObject[] gmObjArr = copyToArray();
+            foreach (GameObject item in gmObjArr)
             {
                 yield return item;
             }
+        }
+
+        private GameObject[] copyToArray()
+        {
+            GameObject[] gmObjArr = new GameObject[gmObjList.Count];
+            gmObjList.CopyTo(gmObjArr);
+            return gmObjArr;
         }
 
     }
@@ -112,10 +121,18 @@ namespace Invader
         }
         public IEnumerable<GameObject> iterate()
         {
-            foreach (GameObject item in gmObjList)
+            GameObject[] gmObjArr = copyToArray();
+            foreach (GameObject item in gmObjArr)
             {
                 yield return item;
             }
+        }
+
+        private GameObject[] copyToArray()
+        {
+            GameObject[] gmObjArr = new GameObject[gmObjList.Count];
+            gmObjList.CopyTo(gmObjArr);
+            return gmObjArr;
         }
     }
 

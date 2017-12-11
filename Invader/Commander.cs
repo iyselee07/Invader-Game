@@ -67,7 +67,7 @@ namespace Invader
 
         public void shot()
         {
-            platoon.firstLeaderShot();
+            platoon.firstLeaderShot((int)Def.ObjectID.PlayerID);
         }
 
 

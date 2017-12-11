@@ -19,15 +19,19 @@ namespace Invader
         public static readonly double[] bulletRange = new double[2] { 4.0, 16.0 };
         // initial row position for each attackers that belong to template squad 
         public static readonly double[] startRowHight = new double[9] {400.0, 400.0, 400.0, 400.0, 400.0, 400.0, 400.0, 400.0, 400.0};
+        public const int enemyPlatoonRow = 5, enemyPlatoonCol = 11;
 
-        public const double bulletSpeed = 10.0;
+        public const double playerBulletSpeed = 10.0, enemyBulletSpeed = 6.0;
         public const double enemyShotInitialHeight = 16.0, playerShotInitialHeight = -16.0;
         // invading enemy use this values
         public const double enemyColInterval = 32.0, enemyRowInterval = 32.0, enemyInvade = 3.0;
-        public const int leastInvadeSpeedCount = 20, InvadeSpeedChange = 5, maxInvadeSpeedCount = 20;
+        public const int leastInvadeSpeedCount = 5, InvadeSpeedChange = 5, maxInvadeSpeedCount = 20;
+
+        public const int leastInvadeAttackCount = 20, maxInvadeAttackCount = 50;
+        public const double aimingThreshold = 0.1;
         // player is allowed to move this row line
         public const double playerLine = 660.0;
-        public const double playerSpeed = 1.0;
+        public const double playerSpeed = 2.0;
 
         public const double existHeight = 960.0, existWidth = 720.0;
         public const double invadingHeight = 900.0, invadingWidth = 720.0;

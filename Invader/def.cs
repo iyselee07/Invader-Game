@@ -20,8 +20,8 @@ namespace Invader
         // initial row position for each attackers that belong to template squad 
         public static readonly double[] startRowHight = new double[9] {400.0, 400.0, 400.0, 400.0, 400.0, 400.0, 400.0, 400.0, 400.0};
 
-        public const double bulletSpeed = 1.0;
-        public const double enemyShotInitialHeight = 9.0, playerShotInitialHeight = -9.0;
+        public const double bulletSpeed = 10.0;
+        public const double enemyShotInitialHeight = 16.0, playerShotInitialHeight = -16.0;
         // invading enemy use this values
         public const double enemyColInterval = 32.0, enemyRowInterval = 32.0, enemyInvade = 3.0;
         public const int leastInvadeSpeedCount = 20, InvadeSpeedChange = 5, maxInvadeSpeedCount = 20;

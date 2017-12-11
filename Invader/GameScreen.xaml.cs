@@ -175,8 +175,11 @@ namespace Invader
                     }
                     foreach (GameObject gmObj in dying.iterate())
                     {
-                        GameObjectImage gmObjImg = display[gmObj];
-                        gmObjImg.dying();
+                        GameObjectImage gmObjImg;
+                        if (display.TryGetValue(gmObj, out gmObjImg))
+                        {
+                            gmObjImg.dying();
+                        }
                     }
                 });
             });
@@ -187,7 +190,7 @@ namespace Invader
         private void GmObjImg_canDispose(object sender, EventArgs e)
         {
             GameObjectImage gmObjImg = sender as GameObjectImage, tmp;
-            display.TryRemove(gmObjImg.gmObj, out tmp);
+            while(!display.TryRemove(gmObjImg.gmObj, out tmp));
         }
 
         private void Grid_KeyDown(object sender, KeyRoutedEventArgs e)

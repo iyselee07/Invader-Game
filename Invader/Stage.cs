@@ -65,7 +65,7 @@ namespace Invader
                     oneShot = currentSpace && !previousSpace;
                     previousSpace = currentSpace;
                     if (oneShot) pCommander.shot();
-                    eCommander.invade();
+                    if (eCommander != null) eCommander.invade();
                     Existence.getInstance().moveAll();
                     break;
                 case Def.State.BeShotDown:

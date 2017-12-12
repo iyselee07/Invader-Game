@@ -12,6 +12,7 @@ namespace Invader
         private PlayerAttacker pAttacker;
         public int remaining { private set; get; }
         public Vector2 pAttackerCenter { get { return (pAttacker.hitBox.start + pAttacker.hitBox.end) / 2.0; } }
+        public Vector2 pAttackerPosition { get { return pAttacker.hitBox.start; } }
         private double movingHight, movingWidth, movingSpeed;
         private Vector2 initialPosition;
         
@@ -156,7 +157,7 @@ namespace Invader
                 Squad squad = new Squad(i, row);
                 squad.makeEnemyTemplateSquad(squadHead);
                 platoon.assignSquad(squad);
-                squadHead.x += Def.enemyRowInterval;
+                squadHead.x += Def.enemyInitRowInterval;
             }
         }
 
@@ -219,7 +220,7 @@ namespace Invader
 
         private void downInvading()
         {
-            platoon.moveDownAll(Def.enemyColInterval);
+            platoon.moveDownAll(Def.enemyInvadingColInterval);
             if (!invadingArea.contain(platoon.platoonBox))
             {
                 EventHandler handler = won;
@@ -417,7 +418,7 @@ namespace Invader
         {
             squadID = sID;
             formationVec = new Vector2(0.0, -1.0);
-            formationWidth = Def.enemyColInterval;
+            formationWidth = Def.enemyInitColInterval;
             squadSize = sSize;
             squadBox = new Area();
             squad = new List<Attacker>();

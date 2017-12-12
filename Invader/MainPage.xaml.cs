@@ -66,6 +66,7 @@ namespace Invader
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
                     timer.Change(Timeout.Infinite, Timeout.Infinite);
+                    timer.Dispose();
                     this.keyholder.LostFocus += (s, e) => { };
                     this.Frame.Navigate(typeof(GameScreen));
                     

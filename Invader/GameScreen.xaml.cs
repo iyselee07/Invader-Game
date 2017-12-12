@@ -34,13 +34,18 @@ namespace Invader
         private DyingExistence dying;
         //private Dictionary<GameObject, GameObjectImage> display;
         private ConcurrentDictionary<GameObject, GameObjectImage> display;
+        private int playerDeathCount;
+        Image playerDeathImage;
         public GameScreen()
         {
             this.InitializeComponent();
             exist = Existence.getInstance();
             dying = DyingExistence.getInstance();
             stage = Stage.getInstance();
+            //display = new Dictionary<GameObject, GameObjectImage>();
             display = new ConcurrentDictionary<GameObject, GameObjectImage>();
+            playerDeathCount = 0;
+            playerDeathImage = new Image();
             //stage.clock += Stage_clock;
             TimerCallback callback = state => { Stage_clock(); };
             timer = new Timer(callback, null, 0, Def.frameSpan);
@@ -62,6 +67,7 @@ namespace Invader
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                     {
                         timer.Change(Timeout.Infinite, Timeout.Infinite);
+                        timer.Dispose();
                         this.keyholder.LostFocus += (s, e) => { };
                         this.Frame.Navigate(typeof(GameOver));
                     });
@@ -69,12 +75,35 @@ namespace Invader
                 case Def.State.BeShotDown:
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                     {
-                        timer.Change(Timeout.Infinite, Timeout.Infinite);
-                        this.keyholder.LostFocus += (s, e) => { };
-                        this.Frame.Navigate(typeof(ShotDown));
+                        if (playerDeathCount == 0)
+                        {
+                            canvas.Children.Add(playerDeathImage);
+                            playerDeathImage.Width = Def.playerRange[0];
+                            playerDeathImage.Height = Def.playerRange[1];
+                            Canvas.SetLeft(playerDeathImage, stage.playerPosition.x);
+                            Canvas.SetTop(playerDeathImage, stage.playerPosition.y);
+                        }
+                        if (playerDeathCount % Def.playerDyingCycle == 0)
+                        {
+                            playerDeathImage.Source = (playerDeathCount / Def.playerDyingCycle % 2 == 0) ? Def.bImgPSD1 : Def.bImgPSD2;
+                        }
+                        playerDeathCount++;
+                        
                     });
                     break;
                 case Def.State.InGame:
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                    {
+
+                        if (playerDeathCount != 0)
+                        {
+                            playerDeathCount = 0;
+                        }
+                        if (canvas.Children.Contains(playerDeathImage))
+                        {
+                            canvas.Children.Remove(playerDeathImage);
+                        }
+                    });
                     await displayImage();
                     break;
             }
@@ -167,6 +196,7 @@ namespace Invader
                             gmObjImg = new GameObjectImage(canvas, gmObj, img);
                             gmObjImg.canDispose += GmObjImg_canDispose;
                             bool isSafe = display.TryAdd(gmObj, gmObjImg);
+                            //display.Add(gmObj, gmObjImg);
                             if (false)
                             {
                                 throw new Exception();
@@ -191,6 +221,7 @@ namespace Invader
         {
             GameObjectImage gmObjImg = sender as GameObjectImage, tmp;
             while(!display.TryRemove(gmObjImg.gmObj, out tmp));
+            //display.Remove(gmObjImg.gmObj);
         }
 
         private void Grid_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -246,7 +277,7 @@ namespace Invader
                 // isDyingLoop = true;
                 isDyingLoop = false;
                 changeImages.Add(Def.bImgP1);
-                dyingAnimation.Add(Def.bImgESD);
+                //dyingAnimation.Add(Def.bImgESD);
                 displayImage.Source = changeImages[0];
                 displayImage.Width = Def.playerRange[0];
                 displayImage.Height = Def.playerRange[1];
@@ -296,8 +327,8 @@ namespace Invader
                 dyingCycle = 0;
                 isDyingLoop = false;
                 changeImages.Add(Def.bImgW1);
-                changeImages.Add(Def.bImgW2);
-                changeImages.Add(Def.bImgW3);
+                //changeImages.Add(Def.bImgW2);
+                //changeImages.Add(Def.bImgW3);
                 changeImages.Add(Def.bImgW4);
                 displayImage.Source = changeImages.First<BitmapImage>();
                 displayImage.Width = Def.wallSize;

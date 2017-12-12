@@ -19,7 +19,7 @@ namespace Invader
         public bool currentSpace = false, previousSpace = false, oneShot = false;
         public Def.State state { private set; get; }
         public int stageNum { private set; get; }
-
+        public Vector2 playerPosition { get { return pCommander.pAttackerPosition; } }
         private int shotdownCount = 0;
 
          public static Stage singleton = new Stage();
@@ -137,6 +137,7 @@ namespace Invader
             switch (state)
             {
                 case Def.State.InGame:
+                case Def.State.BeShotDown:
                     if (e.Key == Windows.System.VirtualKey.Left)
                     {
                         moveDic["left"] = false;

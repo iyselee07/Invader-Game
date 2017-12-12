@@ -141,6 +141,8 @@
     <Content Include="Image\E3-2.png" />
     <Content Include="Image\ESD.png" />
     <Content Include="Image\P-1.png" />
+    <Content Include="Image\P-2.png" />
+    <Content Include="Image\P-3.png" />
     <Content Include="Image\W1.png" />
     <Content Include="Image\W2.png" />
     <Content Include="Image\W3.png" />

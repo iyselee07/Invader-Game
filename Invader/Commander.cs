@@ -30,11 +30,17 @@ namespace Invader
             platoon.Annihilated += Platoon_Annihilated;
         }
 
+        public void initializePlayerValues()
+        {
+            remaining = 3;
+            initialPosition = new Vector2(0.0, movingHight);
+        }
 
         public void organizeAttacker()
         {
             if (platoon.count() != 0)
             {
+                pAttacker.respawnAttacker();
                 return;
             }
             Squad squad = new Squad(0, 1);
@@ -103,6 +109,10 @@ namespace Invader
         private int attackCount, attackTiming;
         private int minAttackCount = Def.leastInvadeAttackCount, maxInvadeAttackCount = Def.maxInvadeAttackCount;
         private double aimingThreshold = Def.aimingThreshold;
+
+        public delegate void TeamDamageEventhandler(object sender, TeamDamageEventArgs e);
+
+        public event TeamDamageEventhandler teamDamage;
         public event EventHandler lost;
         public event EventHandler won;
 
@@ -114,6 +124,7 @@ namespace Invader
             invadingArea = new Area(start, end);
             platoon = new Platoon(0, col);
             makeTemplateEnemy(stageNum);
+            platoon.teamDamage += Platoon_teamDamage;
             platoon.Annihilated += Platoon_Annihilated;
             nowGoRight = true;
             moveCount = 0;
@@ -131,6 +142,7 @@ namespace Invader
             invadingArea = new Area(start, end);
             platoon = new Platoon(0, col);
             makeTemplateEnemy(stageNum);
+            platoon.teamDamage += Platoon_teamDamage;
             platoon.Annihilated += Platoon_Annihilated;
             nowGoRight = true;
             moveCount = 0;
@@ -231,6 +243,15 @@ namespace Invader
             }
         }
 
+        private void Platoon_teamDamage(object sender, TeamDamageEventArgs e)
+        {
+            TeamDamageEventhandler handler = teamDamage;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         private void Platoon_Annihilated(object sender, EventArgs e)
         {
             EventHandler handler = lost;
@@ -249,6 +270,9 @@ namespace Invader
 
         public Area platoonBox { private set; get; }
 
+        public delegate void TeamDamageEventhandler(object sender, TeamDamageEventArgs e);
+
+        public event TeamDamageEventhandler teamDamage;
         public event EventHandler Annihilated;
 
         public Platoon(int pID, int pSize)
@@ -266,11 +290,22 @@ namespace Invader
                 return;
             }
             platoon.Add(squad);
+            squad.teamDamage += Squad_teamDamage;
             squad.Annihilated += Squad_Annihilated;
             updatePlatoonBox();
         }
 
+        public void dismissSquad()
+        {
+            foreach (Squad squad in platoon)
+            {
+                squad.teamDamage -= Squad_teamDamage;
+                squad.Annihilated -= Squad_Annihilated;
+            }
+            platoon.Clear();
+        }
 
+        
         public void firstLeaderShot(params int [] friendly)
         {
             platoon[0].makeLeaderShot(friendly);
@@ -378,7 +413,16 @@ namespace Invader
                 sum += line.count();
             }
             return sum;
-        } 
+        }
+
+        private void Squad_teamDamage(object sender, TeamDamageEventArgs e)
+        {
+            TeamDamageEventhandler handler = teamDamage;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
 
         private void Squad_Annihilated(object sender, EventArgs e)
         {
@@ -412,6 +456,9 @@ namespace Invader
 
         public Area squadBox { private set; get; }
 
+        public delegate void TeamDamageEventhandler(object sender, TeamDamageEventArgs e);
+
+        public event TeamDamageEventhandler teamDamage;
         public event EventHandler Annihilated;
 
         public Squad(int sID, int sSize)
@@ -599,6 +646,16 @@ namespace Invader
                 squad.Remove(sender as Attacker);
             }
 
+            if (sender is EnemyAttacker)
+            {
+                EnemyAttacker eAttacker = sender as EnemyAttacker;
+                TeamDamageEventhandler handler = teamDamage;
+                if (handler != null)
+                {
+                    handler(this, new TeamDamageEventArgs(eAttacker.enemyType));
+                }
+            }
+
             if (squad.Count == 0)
             {
                 EventHandler handler = Annihilated;
@@ -613,5 +670,16 @@ namespace Invader
                 updateSquadBox();
             }
         }
+    }
+
+    public class TeamDamageEventArgs : EventArgs
+    {
+        public int EnemyAttackerType { get; private set; }
+
+        public TeamDamageEventArgs(int eAtcType)
+        {
+            EnemyAttackerType = eAtcType;
+        }
+
     }
 }

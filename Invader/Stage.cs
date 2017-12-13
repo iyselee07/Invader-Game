@@ -19,6 +19,7 @@ namespace Invader
         public bool currentSpace = false, previousSpace = false, oneShot = false;
         public Def.State state { private set; get; }
         public int stageNum { private set; get; }
+        public int score { private set; get; }
         public Vector2 playerPosition { get { return pCommander.pAttackerPosition; } }
         public int remainingPlayerAttacker { get { return pCommander.remaining; } }
         private int shotdownCount = 0;
@@ -26,10 +27,12 @@ namespace Invader
          public static Stage singleton = new Stage();
 
         public event EventHandler clock;
+        public event EventHandler stageChange;
 
         private Stage()
         {
             state = Def.State.Title;
+            score = 0;
             stageNum = 1;
             pCommander = new PlayerCommander();
             pCommander.lost += PCommander_lost;
@@ -51,6 +54,7 @@ namespace Invader
                 case Def.State.EnemyInit:
                     state = Def.State.PlayerInit;
                     eCommander = new EnemyCommander(stageNum);
+                    eCommander.teamDamage += ECommander_teamDamage;
                     eCommander.lost += ECommander_lost;
                     eCommander.won += ECommander_won;
                     Wall.makeTemplateDefenceWall();
@@ -79,6 +83,9 @@ namespace Invader
                         shotdownCount = 0;
                         if (pCommander.remaining == 0)
                         {
+                            Existence.getInstance().clear();
+                            DyingExistence.getInstance().clear();
+                            pCommander.initializePlayerValues();
                             state = Def.State.GameOver;
                         }
                         else
@@ -90,7 +97,7 @@ namespace Invader
             }
         }
 
-
+        
 
         public void interactByKeyPress(object sender, KeyRoutedEventArgs e)
         {
@@ -110,6 +117,7 @@ namespace Invader
                     if (e.Key == Windows.System.VirtualKey.Space)
                     {
                         state = Def.State.Title;
+                        score = 0;
                     }
                     else if (e.Key == Windows.System.VirtualKey.Escape)
                     {
@@ -164,14 +172,22 @@ namespace Invader
             }
         }
 
+        private void ECommander_teamDamage(object sender, TeamDamageEventArgs e)
+        {
+            score += Def.enemyScores[e.EnemyAttackerType];
+        }
         private void ECommander_won(object sender, EventArgs e)
         {
+            Existence.getInstance().clear();
+            DyingExistence.getInstance().clear();
             stageNum = 1;
             state = Def.State.GameOver;
         }
 
         private void ECommander_lost(object sender, EventArgs e)
         {
+            Existence.getInstance().clear();
+            DyingExistence.getInstance().clear();
             stageNum++;
             state = Def.State.EnemyInit;
         }

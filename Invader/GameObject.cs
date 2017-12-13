@@ -48,6 +48,16 @@ namespace Invader
             gmObjList.Remove(item);
         }
 
+        public bool contains(GameObject item)
+        {
+            return gmObjList.Contains(item);
+        }
+
+        public void clear()
+        {
+            gmObjList = new List<GameObject>();
+        }
+
         public void moveAll()
         {
             GameObject[] gmObjArr = copyToArray();
@@ -119,6 +129,11 @@ namespace Invader
         {
             gmObjList.Remove(item);
         }
+        public void clear()
+        {
+            gmObjList = new List<GameObject>();
+        }
+
         public IEnumerable<GameObject> iterate()
         {
             GameObject[] gmObjArr = copyToArray();

@@ -177,6 +177,14 @@ namespace Invader
             exist.add(this);
         }
 
+        public void respawnAttacker()
+        {
+            if (!exist.contains(this))
+            {
+                exist.add(this);
+            }
+        }
+
         public override void moveDown(double step)
         {
             //do nothing

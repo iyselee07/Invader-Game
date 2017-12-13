@@ -34,8 +34,9 @@ namespace Invader
         private DyingExistence dying;
         //private Dictionary<GameObject, GameObjectImage> display;
         private ConcurrentDictionary<GameObject, GameObjectImage> display;
-        private int playerDeathCount;
+        private int playerDeathCount, playerRemainNum;
         Image playerDeathImage;
+        List<Image> playerRemainingImages;
         public GameScreen()
         {
             this.InitializeComponent();
@@ -46,6 +47,8 @@ namespace Invader
             display = new ConcurrentDictionary<GameObject, GameObjectImage>();
             playerDeathCount = 0;
             playerDeathImage = new Image();
+            playerRemainingImages = new List<Image>();
+            playerRemainNum = stage.remainingPlayerAttacker;
             //stage.clock += Stage_clock;
             TimerCallback callback = state => { Stage_clock(); };
             timer = new Timer(callback, null, 0, Def.frameSpan);
@@ -63,7 +66,11 @@ namespace Invader
         {
             switch (stage.state)
             {
+                case Def.State.EnemyInit:
+                    clearDisplay();
+                    break;
                 case Def.State.GameOver:
+                    clearDisplay();
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                     {
                         timer.Change(Timeout.Infinite, Timeout.Infinite);
@@ -102,6 +109,31 @@ namespace Invader
                         if (canvas.Children.Contains(playerDeathImage))
                         {
                             canvas.Children.Remove(playerDeathImage);
+                        }
+                        if (playerRemainNum != stage.remainingPlayerAttacker - 1)
+                        {
+                            playerRemainNum = stage.remainingPlayerAttacker - 1;
+                            Vector2 pRemPos = Def.playerRemainInitPos.copy();
+                            foreach(Image image in playerRemainingImages)
+                            {
+                                if (canvas.Children.Contains(image))
+                                {
+                                    canvas.Children.Remove(image);
+                                }
+                            }
+                            playerRemainingImages.Clear();
+                            for (int i = 0; i < playerRemainNum; i++)
+                            {
+                                Image image = new Image();
+                                canvas.Children.Add(image);
+                                playerRemainingImages.Add(image);
+                                image.Source = Def.bImgP1;
+                                image.Width = Def.playerRange[0];
+                                image.Height = Def.playerRange[1];
+                                Canvas.SetLeft(image, pRemPos.x);
+                                Canvas.SetTop(image, pRemPos.y);
+                                pRemPos += Def.playerRemainInterval;
+                            }
                         }
                     });
                     await displayImage();
@@ -179,7 +211,7 @@ namespace Invader
                     Existcount.Text = Existence.getInstance().count.ToString();
                     Dyingcount.Text = DyingExistence.getInstance().count.ToString();
                     player.Text = display.Count.ToString();
-                    enemy.Text = stage.currentSpace.ToString();
+                    enemy.Text = stage.score.ToString();
 
                     foreach (GameObject gmObj in exist.iterate())
                     {
@@ -215,6 +247,30 @@ namespace Invader
             });
             task.Wait();
             return task;
+        }
+
+        private void clearDisplay()
+        {
+            Task task = Task.Run(async () =>
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                {
+                    foreach (KeyValuePair<GameObject, GameObjectImage> pair in display)
+                    {
+                        eraseImage(pair.Value);
+                    }
+                    display.Clear();
+
+                });
+            });
+        }
+
+        private void eraseImage(GameObjectImage gmObjImg)
+        {
+            if (canvas.Children.Contains(gmObjImg.displayImage))
+            {
+                canvas.Children.Remove(gmObjImg.displayImage);
+            }
         }
 
         private void GmObjImg_canDispose(object sender, EventArgs e)
@@ -401,5 +457,7 @@ namespace Invader
                 dyingCount++;
             }
         }
+
+       
     }
 }

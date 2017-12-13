@@ -33,9 +33,15 @@ namespace Invader
         public const double playerLine = existHeight - 20.0;
         public const double playerSpeed = 2.0;
 
+
+        public readonly static Vector2
+            playerRemainInitPos = new Vector2(20.0, existHeight + 20.0),
+            playerRemainInterval = new Vector2(playerRange[0]* 1.5, 0.0);
+
         // values used for when player destroyed
-        
-        // defintion play erea
+        public static readonly int[] enemyScores = new int[3] { 10, 20, 30 };
+
+        // defintion play area
         public const double existHeight = 400.0, existWidth = 450.0;
         public const double invadingHeight = existHeight - 30.0, invadingWidth = existWidth;
 

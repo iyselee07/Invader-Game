@@ -56,11 +56,11 @@ namespace Invader
 
         public const int enemyMagazineSize = 3, playerMagazineSize = 1;
 
-        public const int PlayerShotdownTime = 90;
-        public const int shotdownTime = 90;
+        public const int PlayerShotdownTime = 70;
+        public const int shotdownTime = 70;
         public const int playerAnimateCycle = 0, playerDyingCycle = 2;
         public const int enemyAnimateCycle = 30, enemyDyingCycle = 10;
-        //public const int enemyAnimateCycle = 30, enemyDyingCycle = 10;
+        public const int bulletAnimateCycle = 0, bulletDyingCycle = 10;
 
         public readonly static BitmapImage bImgE1_1 = new BitmapImage(new Uri("ms-appx:///Image/E1-1.png"));
         public readonly static BitmapImage bImgE1_2 = new BitmapImage(new Uri("ms-appx:///Image/E1-2.png"));
@@ -77,6 +77,7 @@ namespace Invader
         public readonly static BitmapImage bImgESD = new BitmapImage(new Uri("ms-appx:///Image/ESD.png"));
         public readonly static BitmapImage bImgPSD1 = new BitmapImage(new Uri("ms-appx:///Image/P-2.png"));
         public readonly static BitmapImage bImgPSD2 = new BitmapImage(new Uri("ms-appx:///Image/P-3.png"));
+        public readonly static BitmapImage bImgBSD = new BitmapImage(new Uri("ms-appx:///Image/BSD.png"));
 
 
     }

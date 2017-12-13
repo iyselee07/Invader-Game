@@ -312,10 +312,11 @@ namespace Invader
             else if (gmObj is Bullet)
             {
 
-                animateCycle = 0;
-                dyingCycle = 0;
+                animateCycle = Def.bulletAnimateCycle;
+                dyingCycle = Def.bulletDyingCycle;
                 isDyingLoop = false;
                 changeImages.Add(Def.bImgB);
+                dyingAnimation.Add(Def.bImgBSD);
                 displayImage.Source = changeImages[0];
                 displayImage.Width = Def.bulletRange[0];
                 displayImage.Height = Def.bulletRange[1];

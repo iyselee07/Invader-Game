@@ -208,10 +208,10 @@ namespace Invader
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
                     this.keyholder.Focus(FocusState.Keyboard);
-                    Existcount.Text = Existence.getInstance().count.ToString();
-                    Dyingcount.Text = DyingExistence.getInstance().count.ToString();
-                    player.Text = display.Count.ToString();
-                    enemy.Text = stage.score.ToString();
+                    //Existcount.Text = Existence.getInstance().count.ToString();
+                    //Dyingcount.Text = DyingExistence.getInstance().count.ToString();
+                    //player.Text = display.Count.ToString();
+                    scoreNum.Text = stage.score.ToString();
 
                     foreach (GameObject gmObj in exist.iterate())
                     {
@@ -385,7 +385,7 @@ namespace Invader
                 isDyingLoop = false;
                 changeImages.Add(Def.bImgW1);
                 //changeImages.Add(Def.bImgW2);
-                //changeImages.Add(Def.bImgW3);
+                changeImages.Add(Def.bImgW3);
                 changeImages.Add(Def.bImgW4);
                 displayImage.Source = changeImages.First<BitmapImage>();
                 displayImage.Width = Def.wallSize;

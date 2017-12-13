@@ -48,16 +48,16 @@ namespace Invader
         //public const int frameSpan = 1000 / 60;
         public const int frameSpan = 1000 / 60;
 
-        public const int wallTeamNum = 4, wallHP = 2, wallRowNum = 5;
+        public const int wallTeamNum = 4, wallHP = 3, wallRowNum = 5;
         public const double wallSize = 15.0, wallTeamWidth = wallSize * wallRowNum, wallIntervalX = 100.0;
         public static readonly Vector2 wallInterval = new Vector2(wallIntervalX, 0.0);
-        public static readonly Vector2 wallInit = new Vector2((existWidth - ((wallTeamNum - 1) * wallIntervalX + wallTeamWidth))/ 2.0, playerLine - wallSize * 4.0);
+        public static readonly Vector2 wallInit = new Vector2((existWidth - ((wallTeamNum - 1) * wallIntervalX + wallTeamWidth))/ 2.0, playerLine - wallSize * 3.0);
         public static readonly List<Vector2> wallTeam = new List<Vector2>() {
             new Vector2(0.0, 0.0),  new Vector2(0.0, wallSize), new Vector2(0.0, wallSize * 2.0),
-            new Vector2(wallSize, -wallSize), new Vector2(wallSize, 0.0), new Vector2(wallSize, wallSize), new Vector2(wallSize, wallSize * 2.0),
+            new Vector2(wallSize, -wallSize), new Vector2(wallSize, 0.0), new Vector2(wallSize, wallSize), //new Vector2(wallSize, wallSize * 2.0),
             new Vector2(wallSize * 2.0, -wallSize), new Vector2(wallSize * 2.0, 0.0), new Vector2(wallSize * 2.0, wallSize),
-            new Vector2(wallSize * 3.0, -wallSize), new Vector2(wallSize * 3.0, 0.0), new Vector2(wallSize * 3.0, wallSize), new Vector2(wallSize * 3.0, wallSize * 2.0),
-            new Vector2(wallSize * 4.0, 0.0),  new Vector2(wallSize * 4.0, wallSize), new Vector2(wallSize * 4.0, wallSize * 2.0),
+            /*new Vector2(wallSize * 3.0, -wallSize), */new Vector2(wallSize * 3.0, 0.0), new Vector2(wallSize * 3.0, wallSize), new Vector2(wallSize * 3.0, wallSize * 2.0),
+            //new Vector2(wallSize * 4.0, 0.0),  new Vector2(wallSize * 4.0, wallSize), new Vector2(wallSize * 4.0, wallSize * 2.0),
         };
 
         public const int enemyMagazineSize = 3, playerMagazineSize = 1;
@@ -77,7 +77,7 @@ namespace Invader
         public readonly static BitmapImage bImgP1 = new BitmapImage(new Uri("ms-appx:///Image/P-1.png"));
         public readonly static BitmapImage bImgW1 = new BitmapImage(new Uri("ms-appx:///Image/W1.png"));
         //public readonly static BitmapImage bImgW2 = new BitmapImage(new Uri("ms-appx:///Image/W2.png"));
-        //public readonly static BitmapImage bImgW3 = new BitmapImage(new Uri("ms-appx:///Image/W3.png"));
+        public readonly static BitmapImage bImgW3 = new BitmapImage(new Uri("ms-appx:///Image/W3.png"));
         public readonly static BitmapImage bImgW4 = new BitmapImage(new Uri("ms-appx:///Image/W4.png"));
         public readonly static BitmapImage bImgB = new BitmapImage(new Uri("ms-appx:///Image/B.png"));
         public readonly static BitmapImage bImgESD = new BitmapImage(new Uri("ms-appx:///Image/ESD.png"));

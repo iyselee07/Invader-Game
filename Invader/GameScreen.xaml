@@ -12,10 +12,10 @@
             <local:KeyHolder x:Name="keyholder" Height="1" Canvas.Left="131" Canvas.Top="186" Width="1"/>
 
         </Canvas>
-        <TextBlock x:Name="Existcount" HorizontalAlignment="Left" Margin="808,72,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-        <TextBlock x:Name="Dyingcount" HorizontalAlignment="Left" Margin="808,97,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-        <TextBlock x:Name="enemy" HorizontalAlignment="Left" Margin="808,122,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-        <TextBlock x:Name="player" HorizontalAlignment="Left" Margin="808,147,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="displayScore" HorizontalAlignment="Left" Margin="558,72,0,0" TextWrapping="Wrap" Text="Score" VerticalAlignment="Top"/>
+        <TextBlock x:Name="scoreNum" HorizontalAlignment="Left" Margin="558,97,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <!--<TextBlock x:Name="enemy" HorizontalAlignment="Left" Margin="808,122,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>-->
+        <!--<TextBlock x:Name="player" HorizontalAlignment="Left" Margin="808,147,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>-->
 
     </Grid>
 </Page>

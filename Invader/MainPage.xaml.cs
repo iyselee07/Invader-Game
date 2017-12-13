@@ -72,6 +72,13 @@ namespace Invader
                     
                 });
             }
+            else
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                {
+                    this.keyholder.Focus(FocusState.Keyboard);
+                });
+            }
 
         }
 

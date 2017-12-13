@@ -20,6 +20,7 @@ namespace Invader
         public Def.State state { private set; get; }
         public int stageNum { private set; get; }
         public Vector2 playerPosition { get { return pCommander.pAttackerPosition; } }
+        public int remainingPlayerAttacker { get { return pCommander.remaining; } }
         private int shotdownCount = 0;
 
          public static Stage singleton = new Stage();

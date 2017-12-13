@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Image\B.png" />
+    <Content Include="Image\BSD.png" />
     <Content Include="Image\E1-1.png" />
     <Content Include="Image\E1-2.png" />
     <Content Include="Image\E2-1.png" />

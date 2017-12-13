@@ -9,7 +9,8 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Canvas HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="360" Margin="10,10,0,0" KeyDown="keyPressed" KeyUp="keyReleased">
-            <TextBox x:Name="textBox" TextWrapping="Wrap" Text="GameOver" Width="119" Canvas.Left="106" Canvas.Top="192"/>
+            <TextBlock x:Name="textBox" TextWrapping="Wrap" Text="GameOver" Width="119" Canvas.Left="106" Canvas.Top="192"/>
+            <local:KeyHolder x:Name="keyholder" Canvas.Left="150"  Canvas.Top="140" />
         </Canvas>
 
     </Grid>
